@@ -9,13 +9,15 @@
 
 ### Problemas Identificados
 
-| Problema | Descrição |
-|----------|-----------|
-| **Acoplamento** | O Supervisor lista 10 tools diretamente, misturando responsabilidades de orquestração e resolução de dados |
-| **Exposição de conceitos técnicos** | `required_states` menciona `id_especialidade`, `id_convenio` — o Supervisor não deveria conhecer IDs |
-| **Fluxo redundante** | `validar_cpf` e `buscar_paciente` são feitos pelo agente Busca Cadastro *antes* do Supervisor |
-| **Inconsistência com dados recebidos** | O Busca Cadastro já fornece `idpaciente`, `idconvenio`, `idplano`, `data_consulta` — o Supervisor não precisa buscar novamente |
-| **Falta de distinção** | Não diferencia claramente o que o paciente informa (nomes) do que vem da API (IDs) |
+| Problema | Descrição | Supervisor original | Supervisor refatorado |
+|----------|-----------|:-------------------:|:---------------------:|
+| **Acoplamento** | O Supervisor lista 10 tools diretamente, misturando responsabilidades de orquestração e resolução de dados  | ✅ Resolvido — delega a 5 RAGs |
+| **Exposição de conceitos técnicos** | `required_states` menciona `id_especialidade`, `id_convenio` — o Supervisor não deveria conhecer IDs  | ✅ Resolvido — coleta nomes, RAGs resolvem IDs |
+| **Fluxo redundante** | `validar_cpf` e `buscar_paciente` são feitos pelo agente Busca Cadastro *antes* do Supervisor  | ✅ Resolvido — não valida CPF nem busca paciente |
+| **Inconsistência com dados recebidos** | O Busca Cadastro já fornece `idpaciente`, `idconvenio`, `idplano`, `data_consulta` — o Supervisor não precisa buscar novamente  | ✅ Resolvido — `contexto_recebido` documenta isso |
+| **Falta de distinção** | Não diferencia claramente o que o paciente informa (nomes) do que vem da API (IDs)  | ✅ Resolvido — `dados_para_coletar` vs `delegacao_rags` |
+
+**Resumo:** Os problemas **persistem** no `System Message Supervisor.yaml` (original). No `System Message Supervisor (refatorado).yaml`, todos foram **resolvidos**.
 
 ### Dados que o Supervisor Recebe do Agente Busca Cadastro
 
@@ -71,12 +73,18 @@
 | Nome do médico/profissional | RAG_Profissionais | IdProfissional |
 | Data e horário escolhidos | RAG_Horarios | IdProfissionalHorario, Data |
 | (já vem do Busca Cadastro) | — | IdPaciente, IdConvenio, IdPlano |
+| Nome do convênio/plano | RAG_Horarios (busca_convenios, busca_plano) | IdConvenio, IdPlano |
 | Procedimento (derivado da especialidade) | RAG_Procedimento ou RAG_Especialidade | IdProcedimento |
 
 **Valores fixos no payload:**
 - IdUnidade: 2
+- IdProcedimento:15423
 - IdAgendamento: 0
 - EnviaEmailSms, Telemedicina, AceitaTermoConsentimento: true
+
+**Valores fixos no payload para atendimento no particular:**
+- IdConvenio: 107
+- IdPlano: 1293
 
 ---
 
