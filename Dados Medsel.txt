@@ -1,0 +1,31 @@
+-> abaixo segue o link com a documentacao da API do Real Clinic (sistema que deve ser integrado ao bot do N8N)
+https://medsel.realclinic.com.br/medsel/documentacao/
+
+os ultimos testes foram feitos atraves postman.
+
+-> para o banco de dados, é o cloud do google como eu tinha dito, segue login e senha:
+
+Banco de Dados - Google Cloud
+Email:maissaudetecnologia@gmail.com
+Senha: s@udemais
+
+https://console.cloud.google.com/sql/instances/bdn8neviva/studio?project=vocal-lamp-472817-f5
+Intancia: bdn8neviva
+Banco de Dados: clinica
+Usuário: user1
+Senha: N@maste24
+
+-> segue tbm login e senha do N8N
+N8N
+https://maissaude.app.n8n.cloud/workflow/2aBl3Q2eaeTdW3pV
+
+Login: maissaudetecnologia@gmail.com
+Senha: S@udemais24
+
+-> utilizamos a Open AI paga, porem ja nao tem mais creditos, tem que comprar mais
+-> tbm usamos a versao paga do banco de dados e N8N
+-> para testar o bot, utilizamos a api Z-API (nao oficial do whatsapp) e tbm a versao paga (o numero utilizado era o meu.. mas agora acredito que seja interessante usarem outro numero).
+
+REALCLINIC API
+user: user
+id: b022381b662b67466503beee3c8dd5d3
