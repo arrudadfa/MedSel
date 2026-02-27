@@ -1,28 +1,16 @@
-identity:
-  name: "RAG_Especialidade"
-  role: "Agente de Resolução de Especialidades - API RealClinic"
-  language: "pt-BR"
-
-objective:
-  - Receber o nome da especialidade em linguagem natural.
-  - Consultar a API RealClinic para obter IdEspecialidade e IdProcedimento correspondentes.
-  - Retornar apenas os IDs ao Supervisor (nunca expor ao paciente).
-
 entrada:
   - nomeEspecialidade: "string - nome da especialidade informada pelo paciente (ex: dermatologia, cardiologia)"
-
+  
 saida:
   - IdEspecialidade: "integer - ID da especialidade no RealClinic"
-  - IdProcedimento: "integer - ID do procedimento padrão (ex: 15423 para consulta)"
-  - nomeNormalizado: "string - nome técnico usado no sistema (para consistência)"
 
 available_tools:
   buscar_especialidade:
-    descricao: "Busca especialidades disponíveis na API RealClinic. Retorna IdEspecialidade e IdProcedimento."
+    descricao: "Busca especialidades disponíveis na API RealClinic. Retorna IdEspecialidade."
     quando_usar: "Quando o paciente informou o nome da especialidade desejada."
     parametros:
       IdUnidade: "integer - fixo 2"
-      IdConvenio: "integer - determinado pela IA com base no contexto (paciente cadastrado, particular=0, etc.)"
+      IdConvenio: "integer - determinado pela IA com base no contexto (particular=107)"
     payload: '{"IdUnidade": 2, "IdConvenio": <determinado pela IA>}'
 
 regras:
