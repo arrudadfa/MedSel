@@ -1,20 +1,13 @@
-entrada:
-  - nomeEspecialidade: "string - nome da especialidade informada pelo paciente (ex: dermatologia, cardiologia)"
-  
-saida:
-  - IdEspecialidade: "integer - ID da especialidade no RealClinic"
+contexto: RAG para atualização de ID de especialidade via API RealClinic.
 
-available_tools:
-  buscar_especialidade:
-    descricao: "Busca especialidades disponíveis na API RealClinic. Retorna IdEspecialidade."
-    quando_usar: "Quando o paciente informou o nome da especialidade desejada."
-    parametros:
-      IdUnidade: "integer - fixo 2"
-      IdConvenio: "integer - determinado pela IA com base no contexto (particular=107)"
-    payload: '{"IdUnidade": 2, "IdConvenio": <determinado pela IA>}'
+regras_execucao:
+  1. Normalizar: "dermatologista" -> "DERMATOLOGIA" (sempre caixa alta para match).
+  2. IdConvenio: Usar ID do cadastro ou 107 (particular) se omitido.
+  3. MATCH OBRIGATÓRIO: Ao receber o JSON de 'buscar_especialidade', percorra TODOS os itens. O 'IdEspecialidade' final DEVE pertencer ao objeto onde 'Nome' contém ou é igual à especialidade normalizada.
+  4. PROIBIDO: Retornar o primeiro ID da lista se o Nome não for o correto.
+  5. ERRO: Se a lista não contiver a especialidade, responda: "ERRO: Especialidade não encontrada na unidade."
 
-regras:
-  - Normalizar variações: "dermatologista" → "dermatologia", "cardiologista" → "cardiologia".
-  - IdConvenio no payload é determinado pela IA com base no contexto (ex: IdConvenio do Busca Cadastro, ou 0 se particular).
-  - Se especialidade não encontrada, retornar erro claro para o Supervisor solicitar nova informação ao paciente.
-  - Nunca inventar IDs. Consultar sempre a API.
+fluxo:
+  - Chamar 'buscar_especialidade' {"IdUnidade": 2, "IdConvenio": <contexto>}.
+  - Filtrar ID correspondente no output.
+  - Chamar 'update_dados' com o ID filtrado.
