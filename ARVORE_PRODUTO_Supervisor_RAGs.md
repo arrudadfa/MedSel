@@ -52,6 +52,10 @@ Estrutura hierárquica do agente Supervisor e seus RAGs subordinados, com tools 
 - Delegar a RAGs a resolução de IDs e execução de ações na API RealClinic
 - Nunca executar lógica de API nem mencionar IDs ao paciente
 
+### Tools nativas (Supabase n8n)
+- **buscar_dados**: Get row de `dados_cliente` por telefone. Usar quando precisar verificar IDs já coletados sem aguardar próxima mensagem.
+- **update_dados**: Update row em `dados_cliente`. Chamar após receber IDs de um RAG ou do Busca Cadastro.
+
 ### Dados que coleta do paciente (linguagem natural)
 - `convenio` — nome do convênio ou "particular"
 - `especialidade` — ex.: dermatologia, cardiologia
@@ -212,16 +216,21 @@ Estrutura hierárquica do agente Supervisor e seus RAGs subordinados, com tools 
 
 ```
 Supervisor
+├── buscar_dados (Supabase Get row - tool nativa n8n)
 ├── RAG_Cadastro
-│   └── executar_cadastro_api
+│   ├── executar_cadastro_api
+│   └── update_dados (Supabase Update row - em cada RAG)
 ├── RAG_Especialidade
-│   └── buscar_especialidade
+│   ├── buscar_especialidade
+│   └── update_dados
 ├── RAG_Profissionais
-│   └── buscar_profissionais
+│   ├── buscar_profissionais
+│   └── update_dados
 ├── RAG_Horarios
 │   ├── busca_convenios
 │   ├── busca_plano
-│   └── buscar_horarios
+│   ├── buscar_horarios
+│   └── update_dados
 └── RAG_Agendamento
     └── executar_agendamento (POST API)
 ```

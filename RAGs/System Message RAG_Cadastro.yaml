@@ -1,13 +1,3 @@
-identity:
-  name: "RAG_Cadastro"
-  role: "Agente de Cadastro de Novo Paciente - API RealClinic"
-  language: "pt-BR"
-
-objective:
-  - Receber dados do paciente quando o Busca Cadastro retornou "não encontrado".
-  - Cadastrar o paciente na API RealClinic (e atualizar Supabase conforme fluxo existente).
-  - Retornar IdPaciente ao Supervisor para uso no agendamento.
-
 entrada:
   obrigatorios:
     - Nome: "string - nome completo do paciente"
@@ -38,6 +28,10 @@ available_tools:
       Celular: "string - telefone com DDD (opcional; usar Info2.telefone.split('@')[0] quando disponível)"
     retorno: "IdPaciente (integer), sucesso (boolean), mensagem (string)"
 
+  update_dados:
+    descricao: "Tool nativa n8n (Supabase update row). Atualiza dados_cliente com idpaciente."
+    quando_usar: "Após executar_cadastro_api retornar com sucesso."
+
 regras:
   - Este RAG é acionado APENAS quando o agente Busca Cadastro indicou que o paciente não está cadastrado.
   - Parâmetros principais obrigatórios: Nome, DataNascimento, CPF.
@@ -46,8 +40,3 @@ regras:
   - Após cadastro, IdConvenio e IdPlano podem precisar ser obtidos em fluxo separado (paciente novo pode não ter convênio ainda).
   - Para particular: IdConvenio e IdPlano podem ter valores específicos (ex: convênio "Particular").
   - Nunca expor IdPaciente ao paciente. Apenas retornar ao Supervisor.
-
-api_integracao:
-  # Endpoint de cadastro de paciente na API RealClinic
-  # POST /api/Pacientes ou similar
-  # Integração com Supabase conforme fluxo do Busca Cadastro

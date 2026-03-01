@@ -74,7 +74,7 @@
 | Data e horário escolhidos | RAG_Horarios | IdProfissionalHorario, Data |
 | (já vem do Busca Cadastro) | — | IdPaciente, IdConvenio, IdPlano |
 | Nome do convênio/plano | RAG_Horarios (busca_convenios, busca_plano) | IdConvenio, IdPlano |
-| Procedimento (derivado da especialidade) | RAG_Procedimento ou RAG_Especialidade | IdProcedimento |
+| — | — | IdProcedimento = 15423 (fixo) |
 
 **Valores fixos no payload:**
 - IdUnidade: 2

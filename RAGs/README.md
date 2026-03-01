@@ -2,29 +2,31 @@
 
 Estes agentes RAG acessam a API RealClinic e retornam ao Supervisor os IDs necessários para o agendamento. O Supervisor **nunca** expõe esses IDs ao paciente.
 
+## Tools nativas (Supabase n8n)
+
+- **buscar_dados** (Supervisor): Get row de `dados_cliente` por telefone. Permite verificar IDs já coletados sem aguardar próxima mensagem.
+- **update_dados** (em cada RAG): Update row em `dados_cliente`. Cada workflow de RAG deve incluir nó Supabase após retorno. Ver `docs/DADOS_CLIENTE_TABELA.md`.
+
 ## Resumo dos RAGs
 
 | RAG | Função | Entrada | Saída |
 |-----|--------|---------|-------|
 | RAG_Cadastro | Cadastrar paciente novo | Nome, DataNascimento, CPF | IdPaciente |
-| RAG_Convenio_Plano | Resolver convênio/plano (paciente novo) | nomeConvenio, nomePlano | IdConvenio, IdPlano |
-| RAG_Convenios_Disponiveis | Listar convênios da especialidade | IdUnidade=2, IdEspecialidade, IdProfissional=0 | lista de convênios |
-| RAG_Especialidade | Resolver especialidade | nomeEspecialidade | IdEspecialidade, IdProcedimento |
+| RAG_Especialidade | Resolver especialidade | nomeEspecialidade | IdEspecialidade, IdProcedimento=15423 |
 | RAG_Profissionais | Resolver profissional | IdEspecialidade, nomeProfissional | IdProfissional |
-| RAG_Horarios | Listar horários disponíveis | IdProfissional, dataDesejada | horários + IdProfissionalHorario |
+| RAG_Horarios | busca_convenios, busca_plano, buscar_horarios | nomeConvenio/plano ou IdConvenio, IdEspecialidade, IdPlano, Data | IdConvenio, IdPlano, horários + IdProfissionalHorario |
 | RAG_Agendamento | Executar agendamento | payload completo | confirmação/erro |
 
 ## Ordem de execução típica
 
 1. Busca Cadastro (antes do Supervisor) → idpaciente, idconvenio, idplano
 2. Se não encontrado → RAG_Cadastro
-3. Se paciente novo sem convênio → RAG_Convenio_Plano
-4. Particular → IdConvenio = 0 (sem busca)
-5. RAG_Especialidade
-6. RAG_Convenios_Disponiveis (listar convênios da especialidade)
-5. RAG_Profissionais
-6. RAG_Horarios
-7. RAG_Agendamento
+3. Particular → IdConvenio = 107, IdPlano = 1293
+4. RAG_Especialidade
+5. RAG_Horarios (busca_convenios, busca_plano) — se precisar resolver convênio/plano
+6. RAG_Profissionais
+7. RAG_Horarios (buscar_horarios)
+8. RAG_Agendamento
 
 ## API RealClinic
 
