@@ -1,26 +1,19 @@
-entrada:
-  IdUnidade: 2
-  IdConvenio: "integer - do Busca Cadastro ou resolvido"
-  IdEspecialidade: "integer - do RAG_Especialidade"
-  IdPlano: "integer - do Busca Cadastro ou resolvido"
-  IdProfissional: "integer - do RAG_Profissionais"
-  IdProfissionalHorario: "integer - do RAG_Horarios"
-  IdProcedimento: "integer - fixo 15423"
-  IdPaciente: "integer - do Busca Cadastro ou RAG_Cadastro"
-  IdAgendamento: 0
-  Observacao: "string - opcional"
-  Data: "YYYY-MM-DDThh:mm:ssZ"
-  EnviaEmailSms: true
-  Telemedicina: true
-  AceitaTermoConsentimento: true
+contexto: RAG para executar o agendamento via API RealClinic. Os dados de entrada vêm da tool dados_cliente (Supabase), consultados pelo telefone recebido do workflow anterior.
 
-saida:
-  - sucesso: "boolean"
-  - mensagem: "string - confirmação ou descrição do erro"
-  - idAgendamento: "integer - se criado com sucesso"
+regras_execucao:
+  1. Chamar a tool 'dados_cliente' com o telefone recebido para obter todos os IDs necessários.
+  2. VALIDAR antes de agendar: IdConvenio, IdEspecialidade, IdPlano, IdProfissional, IdProfissionalHorario, IdPaciente, Data — todos devem estar preenchidos e diferentes de 0.
+  3. PROIBIDO: Executar 'realiza_agendamento' se qualquer ID obrigatório estiver ausente ou nulo.
+  4. Tratar erros da API (409 conflito, 400 bad request) e retornar mensagem clara ao Supervisor.
+  4a. HORÁRIO BLOQUEADO (conflito 409): tentar automaticamente IdProfissionalHorario + 1 (próximo slot). Repetir até sucesso. Informar ao Supervisor o horário efetivamente agendado.
+  5. Chamar obrigatoriamente a tool 'update_dados' com idAgendamento retornado após agendamento bem-sucedido.
 
-regras:
-  - Validar que todos os IDs obrigatórios estão preenchidos antes de enviar.
-  - Nunca executar se algum ID estiver 0 ou ausente.
-  - Tratar erros da API (409 conflito, 400 bad request, etc.) e retornar mensagem clara.
-  - O Supervisor usa a mensagem de retorno para informar o paciente em linguagem natural.
+fluxo:
+  - Chamar 'dados_cliente' com {"telefone": <recebido do workflow>}.
+  - Validar IDs obrigatórios (ver regra 2).
+  - Chamar 'realiza_agendamento' com payload montado a partir de dados_cliente:
+      {"IdUnidade": 2, "IdConvenio": <dc>, "IdEspecialidade": <dc>, "IdPlano": <dc>,
+       "IdProfissional": <dc>, "IdProfissionalHorario": <dc>, "IdProcedimento": 15423,
+       "IdPaciente": <dc>, "IdAgendamento": 1010, "Observacao": "",
+       "Data": <dc>, "EnviaEmailSms": true, "Telemedicina": true, "AceitaTermoConsentimento": true}
+  - Chamar 'update_dados' com idAgendamento retornado.
