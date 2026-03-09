@@ -1,0 +1,4630 @@
+{
+  "name": "Agente Mestre MedSel v_2",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "id": "9ece88b3-195b-49d3-b5a6-a3e55e03b4f0",
+      "name": "Loop Over Items3",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2080,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "content": "# Splitar Mensagens e Enviar Áudio ou Texto",
+        "height": 416,
+        "width": 1212,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1440,
+        528
+      ],
+      "typeVersion": 1,
+      "id": "3b78e029-b416-48b3-963c-aec798111a12",
+      "name": "Sticky Note18"
+    },
+    {
+      "parameters": {
+        "model": "gpt-5.1-chat-latest",
+        "options": {
+          "responseFormat": "=text"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        464,
+        800
+      ],
+      "id": "ea8c0bbe-373a-41a6-88b2-0cb8cc4afe68",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "WJQJyuMBbjs7ohmB",
+          "name": "MedSel hosted n8n Denis"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "defac08a-6745-422b-bb05-90da9f47d91b",
+              "leftValue": "={{ $('Busca Telefone').last().json.values() }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1664,
+        256
+      ],
+      "id": "d12f14bb-5275-4629-be6c-aca5f9315f5b",
+      "name": "If4"
+    },
+    {
+      "parameters": {
+        "content": "# Histórico Supabase\n",
+        "height": 380,
+        "width": 1212,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1440,
+        144
+      ],
+      "typeVersion": 1,
+      "id": "337af5db-3dfb-4f71-854d-006f84ffd79a",
+      "name": "Sticky Note54"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "chats",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "phone",
+              "keyValue": "={{ $('Info2').item.json.telefone }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1520,
+        256
+      ],
+      "id": "aaa0b6b8-409a-4b6a-b29e-265e3cbe0af9",
+      "name": "Busca Telefone",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "es6PQVYQItLS8Rkn",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "tableId": "chats",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "phone",
+              "fieldValue": "={{ $('Info2').item.json.telefone }}"
+            },
+            {
+              "fieldId": "updated_at",
+              "fieldValue": "={{ $now}}"
+            },
+            {
+              "fieldId": "created_at",
+              "fieldValue": "={{ $now }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1840,
+        176
+      ],
+      "id": "32734b78-3cdb-4349-afa8-3d820116a031",
+      "name": "Adiciona CHAT supabase",
+      "credentials": {
+        "supabaseApi": {
+          "id": "es6PQVYQItLS8Rkn",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "chats",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "phone",
+              "condition": "eq",
+              "keyValue": "={{ $('Info2').item.json.telefone }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "updated_at",
+              "fieldValue": "={{ $now }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1840,
+        352
+      ],
+      "id": "5b75ff66-f04b-47d1-840b-4c817fff57b4",
+      "name": "Atualiza CHAT Supabase",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "es6PQVYQItLS8Rkn",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "chat_messages",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "phone",
+              "fieldValue": "={{ $('Info2').item.json.telefone }}"
+            },
+            {
+              "fieldId": "bot_message",
+              "fieldValue": "={{ $('Supervisor').item.json.output }}"
+            },
+            {
+              "fieldId": "user_message",
+              "fieldValue": "={{ $('Info2').item.json.mensagem }}"
+            },
+            {
+              "fieldId": "message_type",
+              "fieldValue": "={{ $('Info2').item.json.tipo }}"
+            },
+            {
+              "fieldId": "created_at",
+              "fieldValue": "={{ $now }}"
+            },
+            {
+              "fieldId": "nomewpp",
+              "fieldValue": "={{ $('Info2').item.json.NomeWhatsapp }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2016,
+        256
+      ],
+      "id": "c5a72aa5-3406-46ba-9745-0f814f54fe3a",
+      "name": "Cria Histórico Supabase",
+      "credentials": {
+        "supabaseApi": {
+          "id": "es6PQVYQItLS8Rkn",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "=output.messages",
+        "options": {
+          "destinationFieldName": "output"
+        }
+      },
+      "id": "b039f5a2-915e-4346-b454-e6b4617ae905",
+      "name": "Split de Mensagem",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1872,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "key": "={{ $json.phone }}"
+      },
+      "id": "867454fa-4731-4f20-a15a-c8d90d9cc460",
+      "name": "Delete Memory",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        2192,
+        256
+      ],
+      "credentials": {
+        "redis": {
+          "id": "n3BxF46LMKXQCA5L",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Enfileirar Mensagens\n",
+        "height": 796,
+        "width": 620,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -768,
+        400
+      ],
+      "typeVersion": 1,
+      "id": "eabd6988-2c77-428a-b1ee-31c14848f01b",
+      "name": "Sticky Note17"
+    },
+    {
+      "parameters": {
+        "content": "# Roteamento de Mensagens",
+        "height": 796,
+        "width": 1392,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2160,
+        400
+      ],
+      "typeVersion": 1,
+      "id": "02a60f60-4764-4382-8031-f3b933b9131c",
+      "name": "Sticky Note20"
+    },
+    {
+      "parameters": {
+        "content": "# Sistema de atendimento humano",
+        "height": 796,
+        "width": 1156,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1648,
+        1248
+      ],
+      "typeVersion": 1,
+      "id": "4390b795-de38-4ac9-8649-2c218bc822e5",
+      "name": "Sticky Note26"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3c5ccbc9-69d1-4b13-a7c3-e6945bc8c655",
+              "name": "data",
+              "value": "={{ $json.data }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "dc834ddc-f9f5-40a9-87ff-00187760c96a",
+      "name": "Edit Fields3",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1600,
+        816
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "dados_cliente",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone",
+              "condition": "eq",
+              "keyValue": "={{ $('Info2').item.json.telefone }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "atendimento_ia",
+              "fieldValue": "pause"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1120,
+        1376
+      ],
+      "id": "a5863210-f812-46b2-b3f9-5bba6efba84d",
+      "name": "Pausar IA",
+      "credentials": {
+        "supabaseApi": {
+          "id": "es6PQVYQItLS8Rkn",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.atendimento_ia }}",
+                    "rightValue": "pause",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEquals"
+                    },
+                    "id": "ff00573b-e517-43c6-8644-14a4fe8565d1"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "IA Ativa"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "3ef0e01c-cc14-4663-bb4d-2905b350c3ab",
+                    "leftValue": "={{ $json.atendimento_ia }}",
+                    "rightValue": "=pause",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "IA pausada"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8945bd52-fd40-4cf3-9975-fc5937cee28c",
+      "name": "Rota Atendimento",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        -928,
+        1696
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "dados_cliente",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone",
+              "condition": "eq",
+              "keyValue": "={{ $('Info2').item.json.telefone }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "atendimento_ia",
+              "fieldValue": "reativada"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1120,
+        1552
+      ],
+      "id": "5db57b25-3ab9-4575-9c14-7dd9dcba1a21",
+      "name": "Reativar IA",
+      "credentials": {
+        "supabaseApi": {
+          "id": "es6PQVYQItLS8Rkn",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Criação Banco de Dados",
+        "height": 376,
+        "width": 1672,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -384,
+        1600
+      ],
+      "typeVersion": 1,
+      "id": "19bc0c48-aae1-41a4-87b1-0600052e7d90",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "id": "b520b9b9-6f9c-4782-922c-84a653484d49",
+      "name": "OpenAI4",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.6,
+      "position": [
+        -1280,
+        640
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "9Ji6voQoLhH6H3bd",
+          "name": "OpenAi account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b6b2f965-1529-4b65-bc7b-c4260a27341f",
+              "leftValue": "={{ $json.body.conversation.messages[0].sender.identifier || $json.body.conversation.meta.sender.identifier }}",
+              "rightValue": "123456@s.whatsapp.net",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -1840,
+        1296
+      ],
+      "id": "51f83abd-0f54-4fd4-9234-c8fd04636007",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "dados_cliente",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone",
+              "keyValue": "={{ $('Info2').item.json.telefone }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -2112,
+        1616
+      ],
+      "id": "a9ec8809-85a3-4654-98b1-572d6475b20d",
+      "name": "Buscar Cliente",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "es6PQVYQItLS8Rkn",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4a6d9aac-8565-4c58-abe3-8741393a5535",
+              "leftValue": "={{ $('Buscar Cliente').item.json }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -2112,
+        1776
+      ],
+      "id": "6f1da48f-75a3-40e1-83d7-0add0798267b",
+      "name": "Cliente Existe?"
+    },
+    {
+      "parameters": {
+        "tableId": "dados_cliente",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "nomewpp",
+              "fieldValue": "={{ $('Info2').item.json.NomeWhatsapp }}"
+            },
+            {
+              "fieldId": "telefone",
+              "fieldValue": "={{ $('Info2').item.json.telefone }}"
+            },
+            {
+              "fieldId": "created_at",
+              "fieldValue": "={{ $('Webhook').item.json.body.conversation.contact_inbox.created_at }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1920,
+        1792
+      ],
+      "id": "edece3cf-3d7b-4fa8-9745-03a1752d0ab4",
+      "name": "Criar Cliente",
+      "credentials": {
+        "supabaseApi": {
+          "id": "es6PQVYQItLS8Rkn",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Info2').item.json.tipo }}",
+                    "rightValue": "outgoing",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "7c878f9b-2c93-4061-954a-a832153e7647"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "outgoing"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "d7b42536-638f-4128-b51b-6aa913e9d9bc",
+                    "leftValue": "={{ $('Info2').item.json.tipo }}",
+                    "rightValue": "incoming",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "incoming"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7ea2ff6e-5952-449b-bb27-7b430c8d22ec",
+      "name": "ROTA Entrando ou Saindo",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        -1600,
+        1536
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "data",
+        "options": {
+          "fileName": "file.ogg",
+          "mimeType": "application/ogg"
+        }
+      },
+      "id": "2ef3f1d8-aafc-4f8c-9a4b-334e0905b290",
+      "name": "Converter Audio",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        -1440,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "=data",
+        "options": {
+          "fileName": "data.jpeg",
+          "mimeType": "image/jpeg"
+        }
+      },
+      "id": "8c3d238a-684d-4a13-8d82-dd1fc749d60f",
+      "name": "Converter Foto",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        -1440,
+        816
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "e514e613-fd6a-48bd-b0ae-bae2448c810e",
+                    "leftValue": "={{ $('Info2').item.json.mensagem_audio_ou_imagem ? \"null\" : $('Info2').item.json.mensage_de_texto }}",
+                    "rightValue": "null",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEquals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "text"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Info2').item.json.mensagem_audio_ou_imagem }}",
+                    "rightValue": "audio",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "88b5bc5f-ef3c-486c-abe1-96cbb26c75ed"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "audio"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "c0e434dd-1268-421d-b81b-3a5e90ed9550",
+                    "leftValue": "={{ $('Info2').item.json.mensagem_audio_ou_imagem }}",
+                    "rightValue": "image",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "image"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "808bfbc2-1b4f-48c7-a212-4b872bfdb537",
+                    "leftValue": "={{ $('Info2').item.json.mensagem_audio_ou_imagem }}",
+                    "rightValue": "file",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "pdf"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "20da9e0f-5945-46cb-a600-81a7867109fd",
+      "name": "ROTA Mensagens",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        -2112,
+        736
+      ]
+    },
+    {
+      "parameters": {
+        "content": "# Agente Principal\n",
+        "height": 780,
+        "width": 1044,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        624,
+        384
+      ],
+      "typeVersion": 1,
+      "id": "b2498e04-b703-4e17-951e-829c8505fb50",
+      "name": "Sticky Note16"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Info2').item.json.telefone }}",
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        656,
+        752
+      ],
+      "id": "2358f7df-95e0-4c2b-a863-d1e2b30e167b",
+      "name": "Postgres Chat Memory",
+      "executeOnce": true,
+      "credentials": {
+        "postgres": {
+          "id": "R4Y9Z3VWdGIEJjNR",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "n8n_chat_histories",
+          "mode": "list",
+          "cachedResultName": "n8n_chat_histories"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "session_id": "={{ $('Info2').item.json.telefone }}",
+            "message": "={\"type\": \"ai\", \"content\": \"{{ $('Info2').item.json.mensagem.replace(/\\r?\\n|\\r/g, ' ') }}\", \"additional_kwargs\": {}, \"response_metadata\": {}}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "session_id",
+              "displayName": "session_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -928,
+        1376
+      ],
+      "id": "cdbc73ae-ea5f-4f2a-a13e-b0baf4032c75",
+      "name": "Salvar Historico1",
+      "credentials": {
+        "postgres": {
+          "id": "R4Y9Z3VWdGIEJjNR",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        1024
+      ],
+      "id": "736a5695-8594-4aa1-a913-ecfc5812f8a0",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "id": "5d2dbdb2-8be4-474c-973a-afef3250093e",
+      "name": "Intervalo entre Mensagens",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -672,
+        640
+      ],
+      "webhookId": "0ea3e3bc-0b14-40a0-ae6e-509d9cf6befb"
+    },
+    {
+      "parameters": {
+        "operation": "push",
+        "list": "={{ $('Info2').item.json.telefone }}",
+        "messageData": "={{ $('Info2').item.json.mensagem }}",
+        "tail": true
+      },
+      "id": "3c5c3afa-8190-4ac8-ba9e-1369f95ef600",
+      "name": "Texto Redis",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -1920,
+        480
+      ],
+      "credentials": {
+        "redis": {
+          "id": "n3BxF46LMKXQCA5L",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "push",
+        "list": "={{ $('Info2').item.json.telefone }}",
+        "messageData": "={{ $json.text }}",
+        "tail": true
+      },
+      "id": "c94a7904-d413-4233-9abd-cbbafe71de5c",
+      "name": "Audio Redis",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -1120,
+        640
+      ],
+      "credentials": {
+        "redis": {
+          "id": "n3BxF46LMKXQCA5L",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "push",
+        "list": "={{ $('Info2').item.json.telefone }}",
+        "messageData": "={{ $json.content || $('Dados').item.json.message.content || $json.text }}",
+        "tail": true
+      },
+      "id": "8fb76c91-f629-476f-a38a-4c4ce5ca3e99",
+      "name": "imagem Redis",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -928,
+        816
+      ],
+      "credentials": {
+        "redis": {
+          "id": "n3BxF46LMKXQCA5L",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "key": "={{ $('Info2').item.json.telefone }}",
+        "options": {}
+      },
+      "id": "d3b3a0f5-fe35-44f4-af0a-bd2a076d4e4c",
+      "name": "Buscas Mensagens",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -672,
+        816
+      ],
+      "credentials": {
+        "redis": {
+          "id": "n3BxF46LMKXQCA5L",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "239cab79-8fb1-45ca-9a04-11006892d52e",
+              "name": "mensagem_completa",
+              "value": "={{ $json.propertyName }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -448,
+        496
+      ],
+      "id": "b83aaba0-ebb1-4e84-9b5a-8456a3247893",
+      "name": "Mensagem Completa1"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "key": "={{ $('Info2').item.json.telefone }}"
+      },
+      "id": "2d5ec4f9-ac5c-4312-941e-0fdb23df03ee",
+      "name": "Deletar Mensagens",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -272,
+        496
+      ],
+      "credentials": {
+        "redis": {
+          "id": "n3BxF46LMKXQCA5L",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "CREATE TABLE IF NOT EXISTS chat_messages (\n  id BIGSERIAL PRIMARY KEY,\n  created_at TIMESTAMPTZ, \n  phone TEXT,\n  nomewpp TEXT, \n  bot_message TEXT,\n  user_message TEXT, \n  message_type TEXT,\n  active BOOLEAN DEFAULT TRUE\n);\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        16,
+        1744
+      ],
+      "id": "b0bb7b51-daa7-45e0-817f-dabc79d8579d",
+      "name": "chat_messages",
+      "credentials": {
+        "postgres": {
+          "id": "R4Y9Z3VWdGIEJjNR",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "create table IF NOT EXISTS dados_cliente (\n  id bigserial primary key,\n  created_at TIMESTAMPTZ, \n  telefone text, \n  nomewpp text,\n  Nome_Completo text,\n  atendimento_ia text,\n  IdPaciente text,\n  CPF text,\n  nascimento text,\n  IdConvenio text,\n  IdPlano text,\n  data_consulta DATE,\n  IdEspecialidade text,\n  IdProfissional text,\n  IdProfissionalHorario text,\n  IdProcedimento text,\n  IdAgendamento text\n);",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        400,
+        1744
+      ],
+      "id": "f10e9e8c-afaf-49fc-8a6a-89ac74397037",
+      "name": "dados_cliente",
+      "credentials": {
+        "postgres": {
+          "id": "R4Y9Z3VWdGIEJjNR",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "CREATE EXTENSION IF NOT EXISTS vector;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        208,
+        1744
+      ],
+      "id": "7147257f-e0e6-497a-bd36-943ff6b3e0ce",
+      "name": "vetor",
+      "credentials": {
+        "postgres": {
+          "id": "R4Y9Z3VWdGIEJjNR",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "create or replace function match_documents (\n  query_embedding vector(1536),\n  match_count int default null,\n  filter jsonb DEFAULT '{}'\n) returns table (\n  id bigint,\n  content text,\n  metadata jsonb,\n  similarity float\n)\nlanguage plpgsql\nas $$\n#variable_conflict use_column\nbegin\n  return query\n  select\n    id,\n    content,\n    metadata,\n    1 - (documents.embedding <=> query_embedding) as similarity\n  from documents\n  where metadata @> filter\n  order by documents.embedding <=> query_embedding\n  limit match_count;\nend;\n$$;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        784,
+        1744
+      ],
+      "id": "c9dab668-872e-4ddb-8201-d1d95b48c893",
+      "name": "match_documents",
+      "credentials": {
+        "postgres": {
+          "id": "R4Y9Z3VWdGIEJjNR",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "-- Create a table to store your documents\ncreate table IF NOT EXISTS documents (\n  id bigserial primary key,\n  content text, -- corresponds to Document.pageContent\n  metadata jsonb, -- corresponds to Document.metadata\n  embedding vector(1536) -- 1536 works for OpenAI embeddings, change if needed\n);",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        592,
+        1744
+      ],
+      "id": "56071fc0-4450-48ab-b93f-34fa22aff401",
+      "name": "documents",
+      "credentials": {
+        "postgres": {
+          "id": "R4Y9Z3VWdGIEJjNR",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Criação\n",
+        "height": 228,
+        "width": 1552,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -320,
+        1696
+      ],
+      "typeVersion": 1,
+      "id": "94d80c14-ed25-472c-bf9c-db82d0a57619",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Limpeza\n",
+        "height": 244,
+        "width": 1280,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -64,
+        2080
+      ],
+      "typeVersion": 1,
+      "id": "09e33533-86f5-4475-921d-961beb83468c",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM n8n_chat_histories",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        224,
+        2144
+      ],
+      "id": "8338c9f2-15ee-4b70-992c-5330eb2c3878",
+      "name": "Deletar Histórico",
+      "credentials": {
+        "postgres": {
+          "id": "R4Y9Z3VWdGIEJjNR",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "delete from chat_messages",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1008,
+        2144
+      ],
+      "id": "140a702d-4714-49c4-84a4-b75f5e456c9a",
+      "name": "Deletar conteúdo Chat_Messages",
+      "credentials": {
+        "postgres": {
+          "id": "R4Y9Z3VWdGIEJjNR",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "delete from dados_cliente",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        624,
+        2144
+      ],
+      "id": "c71c127c-18c0-4e28-ac11-817fef69f9ad",
+      "name": "Deletar conteúdo Dados Cliente",
+      "credentials": {
+        "postgres": {
+          "id": "R4Y9Z3VWdGIEJjNR",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "delete from chats",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        416,
+        2144
+      ],
+      "id": "df54bc27-148d-4191-afe1-7e6ccd2835ac",
+      "name": "Deletar conteúdo Chats",
+      "credentials": {
+        "postgres": {
+          "id": "R4Y9Z3VWdGIEJjNR",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "delete from documents",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        816,
+        2144
+      ],
+      "id": "78dec4e9-fb32-410d-b6d1-ad78be03319d",
+      "name": "Deletar conteúdo Documentos",
+      "credentials": {
+        "postgres": {
+          "id": "R4Y9Z3VWdGIEJjNR",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d5a342e9-585b-42ea-be44-644adae10199",
+              "leftValue": "={{ $('Mensagem').item.json.mensagem }}",
+              "rightValue": "={{ $json.propertyName.last() }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "4d89ac8f-a855-40f3-ac0f-6d8da9bd89b0",
+      "name": "Compara Memoria",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -672,
+        960
+      ]
+    },
+    {
+      "parameters": {
+        "content": "# Ferramentas de Consulta\n\n",
+        "height": 348,
+        "width": 1364,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        480,
+        1216
+      ],
+      "typeVersion": 1,
+      "id": "7fc8a641-7c5f-421c-a737-1627bafa2d2b",
+      "name": "Sticky Note19"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3c5ccbc9-69d1-4b13-a7c3-e6945bc8c655",
+              "name": "data",
+              "value": "={{ $json.data }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1a484c97-fe08-4dc9-878d-b3ee59d03423",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1600,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "239cab79-8fb1-45ca-9a04-11006892d52e",
+              "name": "mensagem",
+              "value": "={{ $json.content || $json.message?.content || $json.text || $json.mensage_de_texto || \"\" }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -672,
+        496
+      ],
+      "id": "f139ae5b-f4eb-43e6-a0fc-42b62a011e3f",
+      "name": "Mensagem"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Mensagem Completa1').first().json.mensagem_completa }}\n\nCONTEXTO DE SISTEMA:\nData e Hora Atual: {{ ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'][$now.setZone('America/Sao_Paulo').weekday % 7] }}, {{ $now.setZone('America/Sao_Paulo') }}\n\nDADOS DO USUÁRIO (Contexto WhatsApp):\n- Nome no Perfil: {{ $('Info2').item.json.NomeWhatsapp }}\n- Telefone: {{ $('Info2').item.json.telefone.split('@')[0] }}\n- idpaciente:{{ $json.idpaciente }}\n- CPF:{{ $json.cpf }}\n- Data de nascimento: {{ $json.nascimento }}\n- IdConvenio:{{ $json.idconvenio }}\n- IdPlano:{{ $json.idplano }}\n- Data pretendida para agendamento:{{ $json.data_consulta }}\n\nDADOS PARA MARCAÇÃO DA CONSULTA:\n- IdUnidade: 2\n- IdConvenio:{{ $json.idconvenio }}\n- IdEspecialidade:{{ $json.idespecialidade }}\n- IdPlano: {{ $json.idplano }}\n- IdProfissional: {{ $json.idprofissional }}\n- IdProfissionalHorario: {{ $json.idprofissionalhorario }}\n- IdProcedimento: 15421\n- IdAgendamento: {{ $json.idagendamento }} \n- EnviaEmailSms: true\n- Telemedicina: true\n- AceitaTermoConsentimento: true",
+        "options": {
+          "systemMessage": "=identity:\n  name: \"Assistente Virtual da Clínica MedSel\"\n  role: \"Supervisor Conversacional de Agendamento\"\n  language: \"pt-BR\"\n\nobjetivo:\n  - Entrevistar o paciente para coletar dados de convenio, plano, especialidade desejada, data e horário da consulta.\n  - Conduzir coleta de dados em linguagem natural.\n  - Delegar resolução de IDs e ações aos RAGs.\n  - Não expor nem manipular IDs com o paciente.\n\ncontexto_entrada:\n  fonte: \"Busca Cadastro + dados_cliente (Supabase) + histórico da conversa\"\n  paciente_cadastrado: [nome, telefone, idpaciente, cpf, nascimento, idconvenio, idplano, data]\n  paciente_nao_cadastrado: \"delegar RAG_Cadastro com Nome, DataNascimento, CPF (telefone do contexto)\"\n  regra: \"Se dados estiverem incompletos/desatualizados, chamar buscar_dados antes de decidir próximo passo.\"\n\ntools:\n  buscar_dados:\n    uso: \"Ler estado atual (IDs/campos já coletados) antes de perguntar/delegar.\"\n\n  update_dados:\n    uso: \"Persistir IDs/campos recebidos dos RAGs, Busca Cadastro ou particular.\"\n    parametros: \"telefone + campos parciais (idpaciente,idconvenio,idplano,idespecialidade,IdProfissional,idprofissionalhorario,data,idagendamento,nome_whatsapp,cpf,nascimento,data_consulta)\"\n\ncommunication_rules:\n  - Saudação: \"Bom dia/Boa tarde/Boa noite. Bem-vindo à MedSel. Como posso ajudar?\"\n  - Nunca mencionar IDs internos.\n  - Nunca explicar processo interno/API.\n  - Falar apenas em termos do paciente (especialidade, médico, data, horário).\n  - Não repetir pergunta já respondida.\n  - Não anunciar ações antes de executá-las.\n  - Responder só com: próxima pergunta necessária OU confirmação final.\n\nexecution_rules:\n  - Executar tools/RAGs silenciosamente.\n  - Acionar RAG somente com entradas naturais mínimas disponíveis.\n  - Nunca inventar valores; se faltar dado obrigatório, pedir apenas o faltante.\n  - Particular/sem convênio: IdConvenio=107 e IdPlano=1293.\n\n\n\nregras_ordem_flexivel:\n  - Se o paciente informar CONVÊNIO antes da especialidade: é possível buscar quais especialidades estão disponíveis para aquele convênio.\n  - Se o paciente informar ESPECIALIDADE antes do convênio: usar RAG_Horarios (busca_convenios, busca_plano) para resolver IdConvenio e IdPlano.\n  - Se o paciente disser \"particular\" ou \"sem convênio\": IdConvenio = 107, IdPlano = 1293 (não precisa buscar convênios).\n\ndelegacao_rags:\n  RAG_Cadastro:\n    quando: \"paciente não encontrado\"\n    entrada: [Nome, DataNascimento, CPF]\n    saida: [idpaciente]\n\n  RAG_Especialidade:\n    quando: \"especialidade informada\"\n    entrada: [nomeEspecialidade]\n    saida: [idespecialidade]\n    fixo: \"IdProcedimento=15423\"\n\n  RAG_Profissionais:\n    quando: \"especialidade definida + médico informado (ou primeiro disponível)\"\n    entrada: [nomeEspecialidade, nomeProfissional]\n    saida: [idprofissional, lista_profissionais]\n\n  RAG_Horarios:\n    quando: \"SEMPRE quando o cliente informar uma data desejada para consulta E quando resolver convênio/plano ou buscar horários\"\n    entrada: [IdConvenio, IdPlano, IdEspecialidade, Data em formato YYYY-MM-DDThh:mm:ssZ]\n    nota_data: \"Resolver data relativa ('amanhã', 'segunda-feira') para data real ANTES de passar ao RAG. Não perguntar ao paciente.\"\n    saida: [Datas e horários disponíveis com nome dos médicos, em formato de tabela, para o cliente escolher]\n    IMPORTANTE: Nem sempre a data output = Data desejada. Informe o paciente sobre alterações de data.\n\n  RAG_Agendamento:\n    quando: \"todos os IDs obrigatórios disponíveis\"\n    entrada: [IdUnidade, IdConvenio, IdEspecialidade, IdPlano, IdProfissional, IdProfissionalHorario, IdProcedimento, IdPaciente, Data]\n    saida: [confirmacao] ou [erro]\n\nfluxo_decisao:\n  - Se idpaciente existir: não validar CPF e não cadastrar.\n  - Se paciente não encontrado: RAG_Cadastro.\n  - Se especialidade existir: RAG_Especialidade.\n  - Se convênio/plano ausentes e não for particular: RAG_Horarios (busca_convenios/busca_plano).\n  - Se médico definido ou primeiro disponível: RAG_Profissionais.\n  - Se data definida: RAG_Horarios (buscar_horarios).\n  - Se horário escolhido e IDs completos: RAG_Agendamento.\n  - Se paciente pedir PRÓXIMO HORÁRIO (ex: \"próximo\", \"outro horário\", \"seguinte\"): somar +1 ao IdProfissionalHorario atual e acionar RAG_Agendamento diretamente, sem consultar RAG_Horarios.\n\nrestricoes_criticas:\n  - Proibido solicitar/informar ao paciente: IdPaciente, IdConvenio, IdPlano, IdEspecialidade, IdProfissional, IdProfissionalHorario, IdProcedimento.\n  - IDs são internos e sempre resolvidos por RAG/tool."
+        }
+      },
+      "id": "6efef027-3749-4000-9390-6f2d55c70a76",
+      "name": "Supervisor",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.6,
+      "position": [
+        720,
+        512
+      ],
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "text": "=Você é um especialista em OCR, descreva a imagem com precisão.",
+        "inputType": "base64",
+        "options": {
+          "detail": "auto"
+        }
+      },
+      "id": "ece8b932-23a2-4346-b5ac-93bac2d80ad9",
+      "name": "Analyze image",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.6,
+      "position": [
+        -1280,
+        816
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "9Ji6voQoLhH6H3bd",
+          "name": "OpenAi account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Info2').item.json.mensagem_base64.replace('http://https', '') }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1920,
+        816
+      ],
+      "id": "48653ec1-7697-41ed-9504-672636336301",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "BBxKtYiuk1fuLIPk",
+          "name": "Bearer Auth account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1b513343-9b6a-4f6e-a012-ed819bf34a31",
+              "name": "id_conta",
+              "value": "={{ $json.body.account.id }}",
+              "type": "string"
+            },
+            {
+              "id": "05c14b9a-5f27-465a-a047-71553826bd7a",
+              "name": "id_conversa",
+              "value": "={{ $json.body.conversation.id }}",
+              "type": "string"
+            },
+            {
+              "id": "8bf522a6-75fb-434a-854c-b736539309e1",
+              "name": "telefone",
+              "value": "={{ $json.body.conversation.meta.sender.phone_number.replace('+', '').concat('@s.whatsapp.net') }}",
+              "type": "string"
+            },
+            {
+              "id": "0d622a33-f313-4758-a764-fa6cbf2b0587",
+              "name": "mensagem",
+              "value": "={{ $json.body.content || $json.body.attachments?.[0]?.meta?.is_recorded_audio || $json.body.attachments[0].data_url.replace('http://https', '') }}",
+              "type": "string"
+            },
+            {
+              "id": "24caf88e-74ce-43ab-8dc4-1fff471b706f",
+              "name": "tipo",
+              "value": "={{ $json.body.message_type }}",
+              "type": "string"
+            },
+            {
+              "id": "573669d2-1e43-4010-8c82-a67459ffe1db",
+              "name": "etiquetas",
+              "value": "={{ $json.body.conversation.labels }}",
+              "type": "array"
+            },
+            {
+              "id": "f9f64530-896d-4566-8e31-f67c4c077826",
+              "name": "NomeWhatsapp",
+              "value": "={{ $json.body.conversation.messages[0].sender.name }}",
+              "type": "string"
+            },
+            {
+              "id": "40ff895f-f63f-4e4f-bba3-c7d803c277f1",
+              "name": "url_chatwoot",
+              "value": "https://projeto1-chatwoot.udqjve.easypanel.host",
+              "type": "string"
+            },
+            {
+              "id": "4e384d2b-feaa-48a2-9459-41d61965fdbd",
+              "name": "mensage_de_texto",
+              "value": "={{ $json.body.content || \"null\" }}",
+              "type": "string"
+            },
+            {
+              "id": "3c49bdbd-af6d-452c-9be4-5d990123d45b",
+              "name": "=mensagem_audio_ou_imagem",
+              "value": "={{ $json.body.attachments[0].file_type }}",
+              "type": "string"
+            },
+            {
+              "id": "e2433843-a913-4495-81be-00b8f00996ff",
+              "name": "mensagem_base64",
+              "value": "={{ $json.body.attachments[0].data_url.replace(/^https?:\\/\\/https?/, '') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2112,
+        1472
+      ],
+      "id": "99bd6e58-245c-4149-9716-693cb4afc047",
+      "name": "Info2"
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -1760,
+        816
+      ],
+      "id": "75b47263-1ed8-4301-952e-3eff0771d0b6",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Info2').item.json.mensagem_base64.replace('http://https', '') }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1936,
+        656
+      ],
+      "id": "a4e495c0-b46f-46e2-89d6-000373f8aa22",
+      "name": "HTTP Request1",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "BBxKtYiuk1fuLIPk",
+          "name": "Bearer Auth account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -1760,
+        640
+      ],
+      "id": "c8a64352-30a7-45a6-9bef-6c59d994f4c5",
+      "name": "Extract from File1"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ro_agent",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -2112,
+        1328
+      ],
+      "id": "14e8ed26-78a0-46b6-822a-1487be3f6b11",
+      "name": "Webhook",
+      "webhookId": "a49c2be6-7f54-4549-b7dd-0aa4c43ef410"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "9865cb5b-33da-490c-afc3-186457d5b564",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $('Webhook').item.json.body.conversation.messages[0].sender_type }}",
+                    "rightValue": "User"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "IA Pausada"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "5a9a1fee-b408-469f-a08c-e8d690fc9792",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $('Info2').item.json.mensagem }}",
+                    "rightValue": "Atendimento finalizado"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Reativar IA"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5115f61d-8eb3-43ac-b80c-e0e4e852f742",
+      "name": "Pausar IA1",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        -1344,
+        1440
+      ],
+      "typeVersion": 3.2
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Whatsapp message to be splitted and formated: {{ $json.output }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=identity:\n  name: \"Formatter\"\n  role: \"WhatsApp Message Formatter\"\n  output_format: \"Strict JSON Object\"\n  language: \"pt-BR\"\n\nobjective:\n  - Transformar a mensagem em comunicação direta, clara e profissional.\n  - Remover palavras desnecessárias.\n  - Padronizar formatação.\n\nrules:\n  - Remover introduções como: \"Entendi\", \"Com certeza\", \"Perfeito\", \"Vou verificar\".\n  - Não usar itálico ou underscores.\n  - Não usar emojis.\n  - Não repetir saudações se a conversa já estiver em andamento.\n  - Usar **negrito** para:\n      • Especialidades\n      • Datas\n      • Horários\n      • Valores\n  - Utilizar quebras de linha reais para separar blocos.\n  - Começar diretamente com a informação principal.\n  - Finalizar com pergunta clara quando necessário.\n\noutput_format:\n  return_json:\n    structure:\n      {\n        \"messages\": [\"string1\",\"string2\"]\n      }"
+            }
+          ]
+        }
+      },
+      "id": "cc4c1009-c329-4d73-9ac0-c988971cf4da",
+      "name": "Split de mensagens",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.4,
+      "position": [
+        1488,
+        640
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "model": "gpt-5-nano",
+        "options": {}
+      },
+      "id": "57637b5d-ea85-4616-9c28-ccbb348c193a",
+      "name": "OpenAI Split",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        1488,
+        864
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "WJQJyuMBbjs7ohmB",
+          "name": "MedSel hosted n8n Denis"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"additionalProperties\": false,\n  \"required\": [\"messages\"],\n  \"properties\": {\n    \"messages\": {\n      \"type\": \"array\",\n      \"minItems\": 1,\n      \"description\": \"Array of WhatsApp message bubbles. Split long texts into separate strings for better UX.\",\n      \"items\": {\n        \"type\": \"string\",\n        \"minLength\": 1,\n        \"description\": \"A single WhatsApp message bubble using **bold** where appropriate.\"\n      }\n    }\n  }\n}",
+        "autoFix": true
+      },
+      "id": "22093e51-ac79-4b13-bb2c-9efea8d6d95e",
+      "name": "Modelo Output",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1648,
+        800
+      ],
+      "retryOnFail": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "id": "5fa848fe-9679-4233-80f8-38b3f96064c0",
+      "name": "5 segundos",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2480,
+        640
+      ],
+      "webhookId": "3c57757d-c281-4c6e-a0e2-0de293d9a372"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Info2').item.json.url_chatwoot }}/api/v1/accounts/{{ $('Info2').item.json.id_conta }}/conversations/{{ $('Info2').item.json.id_conversa }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "z8JDkmSmULfBjsSdJVSDznzE"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{\n  {\n    \"content\": $('Split de Mensagem').item.json.output,\n    \"message_type\": \"outgoing\",\n    \"private\": false,\n    \"content_type\": \"text\",\n    \"content_attributes\": {\n      \"origin\": \"ai\",\n      \"via\": \"n8n\"\n    }\n  }\n}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2304,
+        640
+      ],
+      "id": "75f887bd-c7b4-43be-b1b9-409b44e92408",
+      "name": "Enviar Texto"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6da1922a-60b4-41dc-9266-ef2da435b6af",
+              "name": "mensage_de_texto",
+              "value": "={{ $('Info2').item.json.mensage_de_texto }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1760,
+        480
+      ],
+      "id": "dbaf2a38-e8ea-4b20-8831-320ba606c770",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "content": "# Limpeza Banco de Dados",
+        "height": 408,
+        "width": 1448,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -160,
+        1984
+      ],
+      "typeVersion": 1,
+      "id": "b40d2011-470c-491c-a4bd-5fde8ed6ebd7",
+      "name": "Sticky Note13"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "CREATE TABLE IF NOT EXISTS public.chats (\n  id bigserial not null,\n  created_at timestamp with time zone null,\n  phone text null,\n  updated_at text null,\n  etapa_followup numeric null,\n  constraint chats_pkey primary key (id)\n) TABLESPACE pg_default;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        976,
+        1744
+      ],
+      "id": "4502f4ed-4753-44ae-b946-3c367a8ef295",
+      "name": "chats",
+      "credentials": {
+        "postgres": {
+          "id": "R4Y9Z3VWdGIEJjNR",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ $json.text }}"
+            },
+            {
+              "content": "=Estruture as informações recebidas",
+              "role": "system"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -1584,
+        992
+      ],
+      "id": "c9d42a03-9e79-4d3f-936d-1646b5c3d5dc",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "9Ji6voQoLhH6H3bd",
+          "name": "OpenAi account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -1760,
+        992
+      ],
+      "id": "19bcb8aa-f312-4cd1-bc47-2bd3f20c6b74",
+      "name": "Extract from File2"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Info2').item.json.mensagem_base64.replace('http://https', '') }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1920,
+        992
+      ],
+      "id": "532120f6-027b-4414-848a-e28cdd7d9988",
+      "name": "HTTP Request2",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "BBxKtYiuk1fuLIPk",
+          "name": "Bearer Auth account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "push",
+        "list": "={{ $('Info2').item.json.telefone }}",
+        "messageData": "={{ $json.message.content }}",
+        "tail": true
+      },
+      "id": "dabcc369-4adb-45e3-8ba6-64ac3574dd36",
+      "name": "PDF Redis",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -1120,
+        992
+      ],
+      "credentials": {
+        "redis": {
+          "id": "n3BxF46LMKXQCA5L",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "n8n_chat_histories",
+          "mode": "list",
+          "cachedResultName": "n8n_chat_histories"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "session_id": "={{ $('Info2').item.json.telefone }}",
+            "message": "={{\n  {\n    \"type\": \"human\",\n    \"content\": $('Info2').item.json.mensagem,\n    \"additional_kwargs\": {},\n    \"response_metadata\": {}\n  }\n}}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "session_id",
+              "displayName": "session_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -704,
+        1808
+      ],
+      "id": "f2244962-ed46-4ece-817e-63f427538378",
+      "name": "Salvar Historico Cliente",
+      "credentials": {
+        "postgres": {
+          "id": "R4Y9Z3VWdGIEJjNR",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Cadastro CRM",
+        "height": 796,
+        "width": 564,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2208,
+        1248
+      ],
+      "typeVersion": 1,
+      "id": "20ad3235-71dd-40bd-8c4c-b1f465f597c5",
+      "name": "Sticky Note27"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "46a189b5-d69d-4f97-aecf-a764a886fbae",
+              "leftValue": "={{ $now.diff(DateTime.fromISO($('Hora da última mensagem').first()?.json?.created_at || $now.minus({minutes: 20})), 'minutes').minutes }}",
+              "rightValue": 10,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1328,
+        1712
+      ],
+      "id": "c6365c84-fb36-4d35-8a7d-b7b7dd167099",
+      "name": "Tempo de inatividade 10min"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT created_at \nFROM chat_messages \nWHERE phone = '{{ $('Info2').item.json.telefone }}' \nORDER BY created_at DESC \nLIMIT 1;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -1472,
+        1712
+      ],
+      "id": "280fcd5b-d9fd-47f8-b8ea-8e464afb21d3",
+      "name": "Hora da última mensagem",
+      "executeOnce": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "R4Y9Z3VWdGIEJjNR",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Verifica matematicamente se um CPF brasileiro é válido. Use esta ferramenta SEMPRE que o usuário fornecer um número de CPF para cadastro.",
+        "jsCode": "try {\n    // 1. Captura Segura do Input (Tenta 'query' ou 'args' ou objeto vazio)\n    // Isso evita o erro \"undefined\"\n    let inputs = {};\n    if (typeof query !== 'undefined') inputs = query;\n    else if (typeof args !== 'undefined') inputs = args;\n    \n    // Pega o CPF ou string vazia\n    const rawCPF = inputs.cpf_number || \"\";\n\n    // 2. Função de Validação (Sem Regex pesado)\n    function validate(str) {\n        if (!str || typeof str !== 'string') return false;\n        \n        // Limpeza manual para evitar travamento de Regex\n        let cpf = \"\";\n        for (let i = 0; i < str.length; i++) {\n            if (str[i] >= '0' && str[i] <= '9') cpf += str[i];\n            // Trava de segurança: se o usuário mandou um texto gigante, para no 11º dígito\n            if (cpf.length > 11) break; \n        }\n\n        if (cpf.length !== 11) return false;\n\n        // Verifica digitos iguais (111.111.111-11)\n        let iguais = true;\n        for (let i = 1; i < 11; i++) {\n            if (cpf[i] !== cpf[0]) iguais = false;\n        }\n        if (iguais) return false;\n\n        // Cálculo Matemático Puro\n        let soma = 0;\n        let resto;\n\n        for (let i = 1; i <= 9; i++) \n            soma = soma + parseInt(cpf.substring(i-1, i)) * (11 - i);\n        resto = (soma * 10) % 11;\n\n        if ((resto === 10) || (resto === 11))  resto = 0;\n        if (resto !== parseInt(cpf.substring(9, 10)) ) return false;\n\n        soma = 0;\n        for (let i = 1; i <= 10; i++) \n            soma = soma + parseInt(cpf.substring(i-1, i)) * (12 - i);\n        resto = (soma * 10) % 11;\n\n        if ((resto === 10) || (resto === 11))  resto = 0;\n        if (resto !== parseInt(cpf.substring(10, 11) ) ) return false;\n\n        return { valid: true, clean: cpf };\n    }\n\n    // 3. Execução\n    const result = validate(rawCPF);\n    \n    // Formatação segura\n    let finalFormat = rawCPF;\n    if (result && result.valid) {\n        const c = result.clean;\n        finalFormat = c.substring(0,3) + \".\" + c.substring(3,6) + \".\" + c.substring(6,9) + \"-\" + c.substring(9,11);\n    }\n\n    // 4. Retorno (Stringify obrigatório)\n    return JSON.stringify({\n        \"valid\": result ? result.valid : false,\n        \"formatted\": finalFormat,\n        \"message\": (result && result.valid) ? \"CPF Válido\" : \"CPF Inválido\"\n    });\n\n} catch (error) {\n    // Se der qualquer erro catastrófico, retorna erro legível em vez de travar\n    return JSON.stringify({\n        \"valid\": false,\n        \"formatted\": \"\",\n        \"message\": \"Erro técnico na validação: \" + error.message\n    });\n}",
+        "specifyInputSchema": true,
+        "jsonSchemaExample": "{\n  \"cpf_number\": \"123.456.789-00\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        1120,
+        624
+      ],
+      "id": "60d80dbb-0f45-49c4-a831-ad9144d355c9",
+      "name": "Valida CPF"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Retorna a lista de médicos e profissionais. Pode filtrar por ID da especialidade se fornecido.",
+        "method": "POST",
+        "url": "https://medsel.realclinic.com.br/medsel/api/ProfissionalIntegracao/Pesquisar",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "IdUnidade",
+              "value": "2"
+            },
+            {
+              "name": "IdConvenio",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Id do Convênio`, 'string') }}"
+            },
+            {
+              "name": "IdEspecialidade",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', `Id da Especialidade`, 'string') }}"
+            },
+            {
+              "name": "IdProcedimento",
+              "value": "15423"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        864,
+        1312
+      ],
+      "id": "e6c651c4-4f7b-483c-bc98-c46766b85733",
+      "name": "consultar_profissionais",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "n2eyKuG3iIbLaWHi",
+          "name": "Unnamed credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "documents",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "content",
+              "fieldValue": "={{ $json.content }}"
+            },
+            {
+              "fieldId": "metadata",
+              "fieldValue": "={{ $('Info2').item.json.telefone }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1120,
+        816
+      ],
+      "id": "234eefac-8f7a-4cb8-8510-46195fbe1a1d",
+      "name": "Cria Histórico de Documento foto",
+      "credentials": {
+        "supabaseApi": {
+          "id": "es6PQVYQItLS8Rkn",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "documents",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "content",
+              "fieldValue": "={{ $json.content }}"
+            },
+            {
+              "fieldId": "metadata",
+              "fieldValue": "={{ $('Info2').item.json.telefone }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1296,
+        992
+      ],
+      "id": "290b30ee-98ab-450b-aaf3-abefce56505f",
+      "name": "Cria Histórico de Documento PDF",
+      "credentials": {
+        "supabaseApi": {
+          "id": "es6PQVYQItLS8Rkn",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Árvore de Produto — System Message Supervisor MedSel\n\nEstrutura hierárquica do agente Supervisor e seus RAGs subordinados, com tools e responsabilidades.\n\n---\n\n## Visão geral\n\n```\n┌─────────────────────────────────────────────────────────────────────────────┐\n│                    AGENTE BUSCA CADASTRO (pré-Supervisor)                     │\n│  CPF → API RealClinic → idpaciente, idconvenio, idplano, data_consulta         │\n└────────────────────────────────────┬────────────────────────────────────────┘\n                                     │\n                                     ▼\n┌─────────────────────────────────────────────────────────────────────────────┐\n│                         SUPERVISOR CONVERSACIONAL                             │\n│  Assistente Virtual da Clínica MedSel                                         │\n│  • Coleta dados em linguagem natural (nunca menciona IDs)                     │\n│  • Delega a RAGs para resolver IDs e executar ações                           │\n└────────────────────────────────────┬────────────────────────────────────────┘\n                                     │\n         ┌───────────────────────────┼───────────────────────────┐\n         │                           │                           │\n         ▼                           ▼                           ▼\n    ┌─────────┐               ┌─────────────┐             ┌─────────────┐\n    │ RAG_    │               │ RAG_        │             │ RAG_        │\n    │ Cadastro│               │ Especialidade│             │ Profissionais│\n    └─────────┘               └─────────────┘             └─────────────┘\n         │                           │                           │\n         │                           │                           │\n         ▼                           ▼                           ▼\n    ┌─────────┐               ┌─────────────┐             ┌─────────────┐\n    │ RAG_    │               │ RAG_        │             │             │\n    │ Horarios│◄──────────────│ Agendamento │             │             │\n    └─────────┘               └─────────────┘             │             │\n                                                          └─────────────┘\n```\n\n---\n\n## 1. Supervisor (raiz)\n\n| Atributo | Valor |\n|----------|-------|\n| **Nome** | Assistente Virtual da Clínica MedSel |\n| **Função** | Supervisor Conversacional de Agendamento |\n| **Idioma** | pt-BR |\n\n### Responsabilidades\n- Conduzir a entrevista com o paciente em linguagem natural\n- Delegar a RAGs a resolução de IDs e execução de ações na API RealClinic\n- Nunca executar lógica de API nem mencionar IDs ao paciente\n\n### Dados que coleta do paciente (linguagem natural)\n- `convenio` — nome do convênio ou \"particular\"\n- `especialidade` — ex.: dermatologia, cardiologia\n- `profissional` — nome do médico (opcional)\n- `data_desejada` — DD/MM/AAAA\n- `horario_preferido` — HH:MM ou período (manhã/tarde)\n\n### Fluxo de decisão\n1. Paciente com idpaciente (Busca Cadastro) → não validar CPF, não cadastrar\n2. Paciente não encontrado → RAG_Cadastro\n3. Particular → IdConvenio = 107, IdPlano = 1293\n4. Especialidade informada → RAG_Especialidade\n5. Convênio/plano a resolver → RAG_Horarios (busca_convenios, busca_plano)\n6. Profissional informado → RAG_Profissionais\n7. Data informada → RAG_Horarios (buscar_horarios)\n8. Horário escolhido e IDs prontos → RAG_Agendamento\n\n---\n\n## 2. RAGs e suas tools\n\n### 2.1 RAG_Cadastro\n\n| Atributo | Valor |\n|----------|-------|\n| **Arquivo** | `RAGs/System Message RAG_Cadastro.yaml` |\n| **Função** | Cadastrar novo paciente na API RealClinic |\n| **Quando** | Paciente não encontrado pelo Busca Cadastro |\n\n#### Tool: `executar_cadastro_api`\n\n| Parâmetro | Tipo | Obrigatório |\n|----------|------|:-----------:|\n| Nome | string | ✅ |\n| DataNascimento | string (ISO 8601) | ✅ |\n| CPF | string | ✅ |\n| RG | string | ❌ |\n| Email | string | ❌ |\n| Sexo | NaoInformado \\| Masculino \\| Feminino | ❌ |\n| Celular | string | ❌ |\n\n**Retorno:** IdPaciente, sucesso, mensagem\n\n---\n\n### 2.2 RAG_Especialidade\n\n| Atributo | Valor |\n|----------|-------|\n| **Arquivo** | `RAGs/System Message RAG_Especialidade.yaml` |\n| **Função** | Resolver nome da especialidade → IdEspecialidade |\n| **Quando** | Paciente informou nome da especialidade |\n\n#### Tool: `buscar_especialidade`\n\n| Parâmetro | Tipo | Valor |\n|----------|------|-------|\n| IdUnidade | integer | 2 (fixo) |\n| IdConvenio | integer | Definido pela IA (contexto) |\n\n**Payload:** `{\"IdUnidade\": 2, \"IdConvenio\": <IA>}`\n\n**Retorno:** IdEspecialidade, nomeNormalizado (IdProcedimento é sempre fixo 15423)\n\n---\n\n### 2.3 RAG_Profissionais\n\n| Atributo | Valor |\n|----------|-------|\n| **Arquivo** | `RAGs/System Message RAG_Profissionais.yaml` |\n| **Função** | Resolver profissional → IdProfissional |\n| **Quando** | IdEspecialidade e IdConvenio obtidos |\n\n#### Tool: `buscar_profissionais`\n\n| Parâmetro | Tipo | Valor |\n|----------|------|-------|\n| IdUnidade | integer | 2 (fixo) |\n| IdConvenio | integer | Definido pela IA |\n| IdEspecialidade | integer | Definido pela IA |\n| IdProcedimento | integer | 15423 (fixo) |\n\n**Payload:** `{\"IdUnidade\": 2, \"IdConvenio\": <IA>, \"IdEspecialidade\": <IA>, \"IdProcedimento\": 15423}`\n\n**Retorno:** IdProfissional, listaProfissionais [{nome, IdProfissional}]\n\n---\n\n### 2.4 RAG_Horarios\n\n| Atributo | Valor |\n|----------|-------|\n| **Arquivo** | `RAGs/System Message RAG_Horarios.yaml` |\n| **Função** | Resolver convênio/plano e listar horários disponíveis |\n| **Quando** | Precisa IdConvenio/IdPlano ou horários |\n\n#### Tool: `busca_convenios`\n- **Função:** Buscar/resolver convênios na API RealClinic\n- **Quando:** Nome do convênio informado pelo paciente\n- **Retorno:** IdConvenio, lista de convênios\n\n#### Tool: `busca_plano`\n- **Função:** Buscar/resolver planos na API RealClinic\n- **Quando:** Nome do plano informado pelo paciente\n- **Retorno:** IdPlano, lista de planos\n\n#### Tool: `buscar_horarios`\n\n| Parâmetro | Tipo | Valor |\n|----------|------|-------|\n| IdConvenio | integer | Definido pela IA |\n| IdEspecialidade | integer | Definido pela IA |\n| IdPlano | integer | Definido pela IA |\n| Data | string | YYYY-MM-DD ou ISO 8601 |\n\n**Payload:** `{\"IdConvenio\": <IA>, \"IdEspecialidade\": <IA>, \"IdPlano\": <IA>, \"Data\": \"<data>\"}`\n\n**Retorno:** horarios [{DataHora, IdProfissional, IdProfissionalHorario}], textoParaPaciente\n\n**Particular:** IdConvenio = 107, IdPlano = 1293\n\n---\n\n### 2.5 RAG_Agendamento\n\n| Atributo | Valor |\n|----------|-------|\n| **Arquivo** | `RAGs/System Message RAG_Agendamento.yaml` |\n| **Função** | Executar agendamento na API RealClinic |\n| **Quando** | Todos os IDs necessários disponíveis no contexto |\n\n#### Tool: `executar_agendamento` (POST API)\n\n| Parâmetro | Origem |\n|----------|--------|\n| IdUnidade | 2 (fixo) |\n| IdConvenio | Busca Cadastro ou RAG_Horarios |\n| IdEspecialidade | RAG_Especialidade |\n| IdPlano | Busca Cadastro ou RAG_Horarios |\n| IdProfissional | RAG_Profissionais |\n| IdProfissionalHorario | RAG_Horarios (buscar_horarios) |\n| IdProcedimento | 15423 (fixo) |\n| IdPaciente | Busca Cadastro ou RAG_Cadastro |\n| IdAgendamento | 0 |\n| Data | YYYY-MM-DDThh:mm:ssZ |\n| EnviaEmailSms | true |\n| Telemedicina | true |\n| AceitaTermoConsentimento | true |\n\n**Endpoint:** `POST https://medsel.realclinic.com.br/medsel/api/AgendamentoIntegracao/Agendar`\n\n**Retorno:** sucesso, mensagem, idAgendamento\n\n---\n\n## 3. Resumo da árvore de tools\n\n```\nSupervisor\n├── RAG_Cadastro\n│   └── executar_cadastro_api\n├── RAG_Especialidade\n│   └── buscar_especialidade\n├── RAG_Profissionais\n│   └── buscar_profissionais\n├── RAG_Horarios\n│   ├── busca_convenios\n│   ├── busca_plano\n│   └── buscar_horarios\n└── RAG_Agendamento\n    └── executar_agendamento (POST API)\n```\n\n---\n\n## 4. Ordem típica de execução\n\n| # | Etapa | RAG / Tool |\n|---|-------|------------|\n| 0 | Busca Cadastro (antes do Supervisor) | — |\n| 1 | Paciente não encontrado | RAG_Cadastro → executar_cadastro_api |\n| 2 | Particular | IdConvenio=107, IdPlano=1293 (sem tool) |\n| 3 | Especialidade informada | RAG_Especialidade → buscar_especialidade |\n| 4 | Convênio/plano a resolver | RAG_Horarios → busca_convenios, busca_plano |\n| 5 | Profissional informado | RAG_Profissionais → buscar_profissionais |\n| 6 | Data informada | RAG_Horarios → buscar_horarios |\n| 7 | Horário escolhido | RAG_Agendamento → executar_agendamento |\n",
+        "height": 4864,
+        "width": 816
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3136,
+        192
+      ],
+      "typeVersion": 1,
+      "id": "58eee961-c29b-4390-ad37-e4e9fcdc3f27",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "typeVersion": 1.1,
+      "position": [
+        1120,
+        752
+      ],
+      "id": "54f0262d-0e53-4347-8bc0-83df0521b784",
+      "name": "Think"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://medsel.realclinic.com.br/medsel/api/PacienteIntegracao/Inserir",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Nome",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Nome completo do paciente`, 'string') }}"
+            },
+            {
+              "name": "DataNascimento",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Data de Nascimento formato YYYY-MM-DD`, 'string') }}"
+            },
+            {
+              "name": "CPF",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', `CPF do paciente`, 'string') }}"
+            },
+            {
+              "name": "Celular",
+              "value": "={{ $('Info2').item.json.telefone.split('@')[0] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.4,
+      "position": [
+        1024,
+        1312
+      ],
+      "id": "634eeee8-c553-4510-a315-3f6d18d14e04",
+      "name": "cadastramento"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://medsel.realclinic.com.br/medsel/api/PlanoIntegracao/Pesquisar",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "IdConvenio",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `Id do Convênio`, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.4,
+      "position": [
+        704,
+        1312
+      ],
+      "id": "c8162bc4-96be-4bd4-bd15-9c5aa3384888",
+      "name": "consultar_planos",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "n2eyKuG3iIbLaWHi",
+          "name": "Unnamed credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://medsel.realclinic.com.br/medsel/api/AgendamentoIntegracao/Agendar",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "IdUnidade",
+              "value": "2"
+            },
+            {
+              "name": "IdConvenio",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Id do Convênio `, 'string') }}"
+            },
+            {
+              "name": "IdEspecialidade",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', `Id da Especialidade`, 'string') }}"
+            },
+            {
+              "name": "IdPlano",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters3_Value', `Id do Plano`, 'string') }}"
+            },
+            {
+              "name": "IdProfissional",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters4_Value', `Id do Profissional`, 'string') }}"
+            },
+            {
+              "name": "IdProfissionalHorario",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters5_Value', `Id para agendamento`, 'string') }}"
+            },
+            {
+              "name": "IdProcedimento",
+              "value": "=15423"
+            },
+            {
+              "name": "IdPaciente",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters7_Value', `Id do Paciente`, 'string') }}"
+            },
+            {
+              "name": "IdAgendamento",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters8_Value', `Id do Agendamento `, 'string') }}"
+            },
+            {
+              "name": "Data",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters9_Value', `Data pretendida para agendamento`, 'string') }}"
+            }
+          ]
+        },
+        "options": {},
+        "optimizeResponse": true,
+        "responseType": "text"
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.4,
+      "position": [
+        1472,
+        1312
+      ],
+      "id": "da5237c7-b30e-4007-b666-67ba7af1ebc3",
+      "name": "agendamento"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://medsel.realclinic.com.br/medsel/api/AgendamentoIntegracao/Agendar",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"IdUnidade\": 2,\n  \"IdConvenio\": 146,\n  \"IdEspecialidade\": 16,\n  \"IdPlano\": 1662,\n  \"IdProfissional\": 381,\n  \"IdProfissionalHorario\": 78600,\n  \"IdProcedimento\": 15423,\n  \"IdPaciente\": 511998,\n  \"IdAgendamento\": 0,\n  \"Data\": \"2030-08-3\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2208,
+        1680
+      ],
+      "id": "15c85e0e-8e23-471c-8dff-88c6591ad7b0",
+      "name": "agendamento1",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "n2eyKuG3iIbLaWHi",
+          "name": "Unnamed credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://medsel.realclinic.com.br/medsel/api/AgendamentoIntegracao/ConsultarHorariosDisponiveis",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"IdUnidade\": 2,\n  \"IdConvenio\": 107,\n  \"IdEspecialidade\": 23,\n  \"IdPlano\": 1293,\n  \"IdProfissional\": 358,\n  \"IdProfissionalHorario\": 0,\n  \"IdProcedimento\": 15423,\n  \"IdPaciente\": 511998,\n  \"IdAgendamento\": 0,\n  \"Data\": \"2026-04-12\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1952,
+        1680
+      ],
+      "id": "cec336f1-8862-485d-8428-6743e7a35b9e",
+      "name": "consultar agenda",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "n2eyKuG3iIbLaWHi",
+          "name": "Unnamed credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Busca dados do paciente",
+        "operation": "get",
+        "tableId": "dados_cliente",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone",
+              "keyValue": "={{ $('Info2').item.json.telefone }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        560,
+        1360
+      ],
+      "id": "592be0e4-0812-46c7-9bc5-17b898174544",
+      "name": "dados_paciente",
+      "credentials": {
+        "supabaseApi": {
+          "id": "es6PQVYQItLS8Rkn",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "create table IF NOT EXISTS agendamentos (\n  id bigserial primary key,\n  created_at TIMESTAMPTZ, \n  telefone text, \n  nomewpp text,\n  Nome_Completo text,\n  IdPaciente text,\n  CPF text,\n  nascimento text,\n  IdConvenio text,\n  IdPlano text,\n  data_consulta DATE,\n  IdUnidade text,\n  IdEspecialidade text,\n  IdProfissional text,\n  IdProfissionalHorario text,\n  IdProcedimento text,\n  IdAgendamento text\n);",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -144,
+        1744
+      ],
+      "id": "e588ce95-36f4-43a9-8d37-d0a3b2f5e11b",
+      "name": "agendamentos",
+      "credentials": {
+        "postgres": {
+          "id": "R4Y9Z3VWdGIEJjNR",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM agendamentos",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        32,
+        2144
+      ],
+      "id": "1b88817a-9eee-4cf9-a0ed-7d4fb70bc585",
+      "name": "Deletar agendamentos",
+      "credentials": {
+        "postgres": {
+          "id": "R4Y9Z3VWdGIEJjNR",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -2192,
+        2464
+      ],
+      "id": "805efda5-4cff-4e5f-bcba-fae8948906e7",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://medsel.realclinic.com.br/medsel/api/AgendamentoIntegracao/ConsultarAgendamentos",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "NumeroPagina",
+              "value": "1"
+            },
+            {
+              "name": "DataInicio",
+              "value": "2026-02-24T00:00:00Z"
+            },
+            {
+              "name": "DataFinal",
+              "value": "2026-03-24T23:59:00Z"
+            },
+            {
+              "name": "Status",
+              "value": "A"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -1984,
+        2464
+      ],
+      "id": "423207cf-bb58-40f9-92a7-cd362eb576ac",
+      "name": "consulta_agendamentos_realizados",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "n2eyKuG3iIbLaWHi",
+          "name": "Unnamed credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Testes\n",
+        "height": 288,
+        "width": 784,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1776,
+        1664
+      ],
+      "typeVersion": 1,
+      "id": "419be7d9-0fff-48c9-ad92-b1a1f6ea34eb",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://medsel.realclinic.com.br/medsel/api/AgendamentoIntegracao/BuscaAgendamento",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"IdProfissional\": 381,\n  \"IdAgendamento\": 0,\n  \"dataInicio\": \"2026-02-24T14:15:22Z\",\n  \"dataFim\": \"2026-03-24T14:15:22Z\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2384,
+        1792
+      ],
+      "id": "b31bdfd2-46b6-401d-922c-3632b4082c87",
+      "name": "agendamento2",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "n2eyKuG3iIbLaWHi",
+          "name": "Unnamed credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Followup",
+        "height": 240,
+        "width": 704,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2288,
+        2400
+      ],
+      "typeVersion": 1,
+      "id": "6fe16143-ea7b-4f75-9cab-d99518413e31",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "databaseId": 358444,
+        "tableId": 843588,
+        "limit": 3,
+        "additionalOptions": {
+          "filters": {
+            "fields": [
+              {
+                "field": 7274606,
+                "operator": "contains",
+                "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fields0_Value', ``, 'string') }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.baserowTool",
+      "typeVersion": 1,
+      "position": [
+        944,
+        1440
+      ],
+      "id": "c7680134-4f11-40aa-ac20-8689ae84f00c",
+      "name": "id_convenio",
+      "credentials": {
+        "baserowApi": {
+          "id": "0MOENSKZLbwKKsOS",
+          "name": "Baserow free hosted"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "databaseId": 358444,
+        "tableId": 843591,
+        "rowId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Row_ID', ``, 'string') }}"
+      },
+      "type": "n8n-nodes-base.baserowTool",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        1440
+      ],
+      "id": "69636ae7-3032-4026-aefd-7bd338066d7d",
+      "name": "id_especialidade",
+      "credentials": {
+        "baserowApi": {
+          "id": "0MOENSKZLbwKKsOS",
+          "name": "Baserow free hosted"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Busca dados de disponibilidade de agenda de um profissional",
+        "method": "POST",
+        "url": "https://medsel.realclinic.com.br/medsel/api/AgendamentoIntegracao/ConsultarHorariosDisponiveis",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "IdUnidade",
+              "value": "2"
+            },
+            {
+              "name": "IdConvenio",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `Id do convênio`, 'string') }}"
+            },
+            {
+              "name": "IdEspecialidade",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', `Id da especialidade`, 'string') }}"
+            },
+            {
+              "name": "IdPlano",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters3_Value', `Id do Plano`, 'string') }}"
+            },
+            {
+              "name": "IdProfissional",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters4_Value', `Id do Profissional`, 'string') }}"
+            },
+            {
+              "name": "IdProcedimento",
+              "value": "15423"
+            },
+            {
+              "name": "Data",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters6_Value', `format: YYYY-MM-DD`, 'string') }}"
+            }
+          ]
+        },
+        "options": {},
+        "optimizeResponse": true,
+        "responseType": "text"
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.4,
+      "position": [
+        1328,
+        1312
+      ],
+      "id": "3db28191-7dde-4171-8aa0-cfd179a1c471",
+      "name": "busca_horarios",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "n2eyKuG3iIbLaWHi",
+          "name": "Unnamed credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Buscar Cliente').item.json.idpaciente }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "empty",
+                      "singleValue": true
+                    },
+                    "id": "83e785b0-73aa-4557-bb87-f4e2d0a1a54b"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Sem ID Paciente"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "cbbfa994-0720-45a1-97ba-2b639c14b7fc",
+                    "leftValue": "={{ $('Buscar Cliente').item.json.idpaciente }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Com ID Paciente"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -64,
+        496
+      ],
+      "id": "c9b079e7-1777-460f-908a-05245f67764d",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "={{ $json.mensagem_completa }}"
+            },
+            {
+              "role": "system",
+              "content": "identity:\n  name: \"Busca_Cadastro\"\n  role: \"Agente Executor de Identificação de Paciente\"\n  language: \"pt-BR\"\n\nobjective:\n  - Solicitar o CPF do paciente.\n  - Executar a tool buscar_paciente1 quando o CPF for informado.\n  - Nunca inventar dados.\n\ncommunication_rules:\n  - Se o CPF NÃO estiver presente na mensagem do usuário:\n      Responder exatamente:\n      \"Bem-vindo à MedSel. Para podermos te ajudar, preciso do número do seu CPF.\"\n  - Não explicar ações internas.\n  - Não mencionar IDs ao paciente.\n\nexecution_rules:\n  - Quando um CPF válido for identificado na mensagem:\n      Executar a tool buscar_paciente1 passando o CPF.\n  - Após executar a tool:\n      Retornar APENAS o output da tool.\n  - Nunca gerar IdPaciente manualmente.\n  - Nunca responder ao paciente após executar a tool.\n\ntools:\n  - buscar_paciente1:\n      required_input: [\"cpf\"]\n      description: \"Busca o cadastro do paciente e retorna IdPaciente e dados associados.\""
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        560,
+        -80
+      ],
+      "id": "e95ea3e3-6f48-4bde-ab58-1c8f92c9c2b5",
+      "name": "Busca cadastro",
+      "credentials": {
+        "openAiApi": {
+          "id": "WJQJyuMBbjs7ohmB",
+          "name": "MedSel hosted n8n Denis"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Switch').item.json.mensagem_completa }}",
+        "options": {
+          "systemMessage": "=identity:\n  name: \"Busca_Cadastro\"\n  role: \"Agente Executor de Identificação de Paciente\"\n  language: \"pt-BR\"\n\nobjective:\n  - Solicitar o CPF do paciente.\n  - Executar a tool buscar_paciente1 quando o CPF for informado.\n  - Nunca inventar dados.\n\nexecution_rules:\n  - Quando um CPF válido for identificado na mensagem:\n      Executar a tool buscar_paciente1 passando o CPF.\n  - Após executar a tool:\n      Retornar APENAS o output da tool.\n  - Nunca gerar IdPaciente manualmente.\n  - Nunca responder ao paciente após executar a tool.\n\ntools:\n  - buscar_paciente:\n      required_input: [\"cpf\"]\n      description: \"Busca o cadastro do paciente e retorna IdPaciente e dados associados.\"\n      error: \"CPF não encontrado\""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        160,
+        352
+      ],
+      "id": "f35d8f11-995e-4c4e-8025-5dcea5cc770b",
+      "name": "Busca Cadastro"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "dados_cliente",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone",
+              "condition": "eq",
+              "keyValue": "={{ $('Info2').item.json.telefone }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "idpaciente",
+              "fieldValue": "={{ JSON.parse($json.output)[0].Id }}"
+            },
+            {
+              "fieldId": "cpf",
+              "fieldValue": "={{ JSON.parse($json.output)[0].CPF }}"
+            },
+            {
+              "fieldId": "nome_completo",
+              "fieldValue": "={{ JSON.parse($json.output)[0].Nome }}"
+            },
+            {
+              "fieldId": "nascimento",
+              "fieldValue": "={{ JSON.parse($json.output)[0].DataNascimento }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        512,
+        224
+      ],
+      "id": "0109a22d-6cb1-40ce-be19-08809cf54099",
+      "name": "Update a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "es6PQVYQItLS8Rkn",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "dados_cliente",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone",
+              "keyValue": "={{ $('Info2').item.json.telefone }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        512,
+        512
+      ],
+      "id": "a05ff983-b074-4c66-afdb-a5a1b7d3b07a",
+      "name": "Busca dados Paciente",
+      "credentials": {
+        "supabaseApi": {
+          "id": "es6PQVYQItLS8Rkn",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Este agente cria o cadastro de clientes novos.",
+        "workflowId": {
+          "__rl": true,
+          "value": "zdXbJqLB60etQZCc",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/zdXbJqLB60etQZCc",
+          "cachedResultName": "RAG_Cadastro"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "dados_cadastro": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('dados_cadastro', `Envie as informações para a realização do cadastro do paciente caso ele não possua o IdPaciente.`, 'string') }}",
+            "Telefone": "={{ $json.telefone }}"
+          },
+          "matchingColumns": [
+            "dados_cadastro"
+          ],
+          "schema": [
+            {
+              "id": "dados_cadastro",
+              "displayName": "dados_cadastro",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        624,
+        960
+      ],
+      "id": "1ca38818-fcc5-4f57-86bc-c5b8d0258f23",
+      "name": "RAG_Cadastro"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "VdZzSOyxRLWGJEN8",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/VdZzSOyxRLWGJEN8",
+          "cachedResultName": "RAG_Especialidade"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Id_convenio": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Id_convenio', `Enviar o Id do convênio escolhido pelo paciente`, 'string') }}",
+            "Telefone": "={{ $json.telefone }}",
+            "Especialidade": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Especialidade', `Informe a Especialidade mais indicada para o paciente.`, 'string') }}"
+          },
+          "matchingColumns": [
+            "dados_cadastro"
+          ],
+          "schema": [
+            {
+              "id": "Id_convenio",
+              "displayName": "Id_convenio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Especialidade",
+              "displayName": "Especialidade",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        992,
+        1056
+      ],
+      "id": "406bda74-5ab9-42f3-85de-e9dfdbe05748",
+      "name": "RAG_Especialidade"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "xbekGG2tEReNJm8x",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/xbekGG2tEReNJm8x",
+          "cachedResultName": "RAG_Agendamento"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Telefone": "={{ $json.telefone }}",
+            "query": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('query', `Todas as informações relevantes para a marcação de uma consulta`, 'string') }}"
+          },
+          "matchingColumns": [
+            "dados_cadastro"
+          ],
+          "schema": [
+            {
+              "id": "query",
+              "displayName": "query",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        1120,
+        944
+      ],
+      "id": "1404c240-47d0-4c64-a700-ad7954017dfa",
+      "name": "RAG_Agendamento"
+    },
+    {
+      "parameters": {
+        "description": "Este workflow retorna os dados de horário e data em que um profissional está disponível. Nem sempre esta data será a mesma solicitada pelo cliente. É importante informar quando a data output é diferente da data solicitada",
+        "workflowId": {
+          "__rl": true,
+          "value": "j5C1NrLQVOLHTH5N",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/j5C1NrLQVOLHTH5N",
+          "cachedResultName": "RAG_Horarios"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Id_Especialidade": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Id_Especialidade', `Enviar o ID da especialidade indicada para o paciente`, 'string') }}",
+            "Id_Profissional": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Id_Profissional', `Enviar o ID do profissional desejado `, 'string') }}",
+            "Id_Convenio": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Id_Convenio', `Enviar o ID do convenio desejado. Se for particular, ID = 107`, 'string') }}",
+            "Id_Plano": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Id_Plano', `Enviar o ID do plano desejado. Se for particular, ID = 1293`, 'string') }}",
+            "Data": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Data', `Data desejada para a consulta. Converter a data para o formato YYYY-MM-DD`, 'string') }}",
+            "Telefone": "={{ $json.telefone }}"
+          },
+          "matchingColumns": [
+            "dados_cadastro"
+          ],
+          "schema": [
+            {
+              "id": "Id_Especialidade",
+              "displayName": "Id_Especialidade",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Id_Profissional",
+              "displayName": "Id_Profissional",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Id_Convenio",
+              "displayName": "Id_Convenio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Id_Plano",
+              "displayName": "Id_Plano",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Data",
+              "displayName": "Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        816,
+        1056
+      ],
+      "id": "4fd73fef-4b32-4853-8e4d-3a8dec01d472",
+      "name": "RAG_Horarios"
+    },
+    {
+      "parameters": {
+        "description": "Esta ferramenta retorna o ID e o nome dos profissionais da especialidade escolhida.",
+        "workflowId": {
+          "__rl": true,
+          "value": "y0zBlCUjQJekwIIW",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/y0zBlCUjQJekwIIW",
+          "cachedResultName": "RAG_Profissionais"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "IdConvenio": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('IdConvenio', `Informe o ID do convênio escolhido pelo cliente. Ex. Particular, ID 107`, 'string') }}",
+            "IdEspecialidade": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('IdEspecialidade', `Informe a especialidade e o ID da especialidade. Ex Ortopedia, ID:23`, 'string') }}",
+            "Telefone": "={{ $json.telefone }}"
+          },
+          "matchingColumns": [
+            "dados_cadastro"
+          ],
+          "schema": [
+            {
+              "id": "IdConvenio",
+              "displayName": "IdConvenio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "IdEspecialidade",
+              "displayName": "IdEspecialidade",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        1280,
+        992
+      ],
+      "id": "050276aa-a578-46ed-bf62-bb4da4095feb",
+      "name": "RAG_Profissionais"
+    },
+    {
+      "parameters": {
+        "content": "## Dados para Agendamento\n\n{\n  \"IdUnidade\": 2,\n  \"IdConvenio\": 0,\n  \"IdEspecialidade\": 0,\n  \"IdPlano\": 0,\n  \"IdProfissional\": 0,\n  \"IdProfissionalHorario\": 0,\n  \"IdProcedimento\": 0,\n  \"IdPaciente\": 0,\n  \"IdAgendamento\": 0,\n  \"IdContrato\": 0,\n  \"MatriculaConveniado\": \"string\",\n  \"Observacao\": \"string\",\n  \"Data\": \"2019-08-24T14:15:22Z\",\n  \"EnviaEmailSms\": true,\n  \"Telemedicina\": true,\n  \"AceitaTermoConsentimento\": true\n}\n",
+        "height": 416,
+        "width": 592
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        800,
+        -32
+      ],
+      "typeVersion": 1,
+      "id": "a30eb897-29e1-4257-b838-b9f677f92af6",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "dados_cliente",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "=telefone",
+              "condition": "eq",
+              "keyValue": "={{ $json.telefone }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "idconvenio",
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues0_Field_Value', `ID do convênio informado pelo paciente`, 'string') }}"
+            },
+            {
+              "fieldId": "idplano",
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues1_Field_Value', `ID do plano informado pelo paciente`, 'string') }}"
+            },
+            {
+              "fieldId": "data_consulta",
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues2_Field_Value', `Data desejada da consulta. Transformar para o formato YYYY-MM-DD`, 'string') }}"
+            },
+            {
+              "fieldId": "idespecialidade",
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues3_Field_Value', `ID da especialidade desejada.`, 'string') }}"
+            },
+            {
+              "fieldId": "idprofissional",
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues4_Field_Value', `ID do profissional disponível na a data desejada`, 'string') }}"
+            },
+            {
+              "fieldId": "idprofissionalhorario",
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues5_Field_Value', `ID da agenda do profissional`, 'string') }}"
+            },
+            {
+              "fieldId": "idprocedimento",
+              "fieldValue": "15421"
+            },
+            {
+              "fieldId": "idagendamento",
+              "fieldValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('fieldValues7_Field_Value', `ID do agendamento realizado`, 'string') }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        880,
+        928
+      ],
+      "id": "2cf50ecb-56ad-497a-989d-4bd84489e3be",
+      "name": "update_dados",
+      "credentials": {
+        "supabaseApi": {
+          "id": "es6PQVYQItLS8Rkn",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "dados_cliente",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telefone",
+              "keyValue": "={{ $json.telefone }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        752,
+        912
+      ],
+      "id": "a7e08e6d-e952-4d36-9c7e-acc681f774bb",
+      "name": "Get a row in Supabase",
+      "credentials": {
+        "supabaseApi": {
+          "id": "es6PQVYQItLS8Rkn",
+          "name": "arrudadfa@gmail.com's Project"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://medsel.realclinic.com.br/medsel/api/PacienteIntegracao/Buscar",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "CPF",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `CPF do paciente`, 'string') }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.4,
+      "position": [
+        304,
+        752
+      ],
+      "id": "582d7650-1b3e-44ab-8a08-2f5228822077",
+      "name": "buscar_paciente",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "n2eyKuG3iIbLaWHi",
+          "name": "Unnamed credential"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2026-02-18T11:00:44.006-03:00",
+          "Readable date": "February 18th 2026, 11:00:44 am",
+          "Readable time": "11:00:44 am",
+          "Day of week": "Wednesday",
+          "Year": "2026",
+          "Month": "February",
+          "Day of month": "18",
+          "Hour": "11",
+          "Minute": "00",
+          "Second": "44",
+          "Timezone": "America/Sao_Paulo (UTC-03:00)"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "maissaude.app.n8n.cloud",
+            "user-agent": "rest-client/2.1.0 (linux-musl x86_64) ruby/3.4.4p34",
+            "content-length": "4712",
+            "accept": "application/json",
+            "accept-encoding": "gzip, br",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "72.62.137.47",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "BR",
+            "cf-ray": "9d95a81ceabf4a71-GRU",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "content-type": "application/json",
+            "x-forwarded-for": "72.62.137.47, 172.71.238.113",
+            "x-forwarded-host": "maissaude.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-gwc-67-949b7659c-qf7vx",
+            "x-is-trusted": "yes",
+            "x-real-ip": "72.62.137.47"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "account": {
+              "id": 1,
+              "name": "Agent"
+            },
+            "additional_attributes": {},
+            "content_attributes": {
+              "in_reply_to": null
+            },
+            "content_type": "text",
+            "content": "Sim",
+            "conversation": {
+              "additional_attributes": {},
+              "can_reply": true,
+              "channel": "Channel::Api",
+              "contact_inbox": {
+                "id": 262,
+                "contact_id": 211,
+                "inbox_id": 1,
+                "source_id": "1a8431fb-78db-45cd-9a4a-5303457b59dc",
+                "created_at": "2026-01-10T17:54:37.348Z",
+                "updated_at": "2026-01-10T17:54:37.348Z",
+                "hmac_verified": false,
+                "pubsub_token": "UU61vEVydktwcBbxZ2FqsGfR"
+              },
+              "id": 51,
+              "inbox_id": 1,
+              "messages": [
+                {
+                  "id": 6035,
+                  "content": "Sim",
+                  "account_id": 1,
+                  "inbox_id": 1,
+                  "conversation_id": 51,
+                  "message_type": 0,
+                  "created_at": 1773012929,
+                  "updated_at": "2026-03-08T23:35:29.746Z",
+                  "private": false,
+                  "status": "sent",
+                  "source_id": "WAID:ACF9E2BEF0A2D3FE8C9F5AB03C9BF03D",
+                  "content_type": "text",
+                  "content_attributes": {
+                    "in_reply_to": null
+                  },
+                  "sender_type": "Contact",
+                  "sender_id": 211,
+                  "external_source_ids": {},
+                  "additional_attributes": {},
+                  "processed_message_content": "Sim",
+                  "sentiment": {},
+                  "conversation": {
+                    "assignee_id": null,
+                    "unread_count": 10,
+                    "last_activity_at": 1773012929,
+                    "contact_inbox": {
+                      "source_id": "1a8431fb-78db-45cd-9a4a-5303457b59dc"
+                    }
+                  },
+                  "sender": {
+                    "additional_attributes": {
+                      "avatar_url_hash": "3ca4bc5c4ca9991a5d2b5c7a08c85ffd76d4a2a59a7cbf8fd70419bf03a99ce8",
+                      "last_avatar_sync_at": "2026-03-08T12:02:20Z"
+                    },
+                    "custom_attributes": {},
+                    "email": null,
+                    "id": 211,
+                    "identifier": "5512991472732@s.whatsapp.net",
+                    "name": "Denis Arruda",
+                    "phone_number": "+5512991472732",
+                    "thumbnail": "https://projeto1-chatwoot.udqjve.easypanel.host/rails/active_storage/representations/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBbGNJIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--e699b3bd04b32870020b86c75f14c897d5739d4d/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCem9MWm05eWJXRjBTU0lJYW5CbkJqb0dSVlE2RTNKbGMybDZaVjkwYjE5bWFXeHNXd2RwQWZvdyIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--5a2e77c5c83b1610db14ec1275d50e2e9b5bab8b/473398872_612932874673357_2127962019839100710_n.jpg",
+                    "blocked": false,
+                    "type": "contact"
+                  }
+                }
+              ],
+              "labels": [],
+              "meta": {
+                "sender": {
+                  "additional_attributes": {
+                    "avatar_url_hash": "3ca4bc5c4ca9991a5d2b5c7a08c85ffd76d4a2a59a7cbf8fd70419bf03a99ce8",
+                    "last_avatar_sync_at": "2026-03-08T12:02:20Z"
+                  },
+                  "custom_attributes": {},
+                  "email": null,
+                  "id": 211,
+                  "identifier": "5512991472732@s.whatsapp.net",
+                  "name": "Denis Arruda",
+                  "phone_number": "+5512991472732",
+                  "thumbnail": "https://projeto1-chatwoot.udqjve.easypanel.host/rails/active_storage/representations/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBbGNJIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--e699b3bd04b32870020b86c75f14c897d5739d4d/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCem9MWm05eWJXRjBTU0lJYW5CbkJqb0dSVlE2RTNKbGMybDZaVjkwYjE5bWFXeHNXd2RwQWZvdyIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--5a2e77c5c83b1610db14ec1275d50e2e9b5bab8b/473398872_612932874673357_2127962019839100710_n.jpg",
+                  "blocked": false,
+                  "type": "contact"
+                },
+                "assignee": null,
+                "assignee_type": null,
+                "team": null,
+                "hmac_verified": false
+              },
+              "status": "open",
+              "custom_attributes": {},
+              "snoozed_until": null,
+              "unread_count": 10,
+              "first_reply_created_at": "2026-01-13T23:43:06.776Z",
+              "priority": null,
+              "waiting_since": 0,
+              "agent_last_seen_at": 1772413997,
+              "contact_last_seen_at": 1773012921,
+              "last_activity_at": 1773012929,
+              "timestamp": 1773012929,
+              "created_at": 1768067677,
+              "updated_at": 1773012929.7499788
+            },
+            "created_at": "2026-03-08T23:35:29.746Z",
+            "id": 6035,
+            "inbox": {
+              "id": 1,
+              "name": "aula_agentes_ia"
+            },
+            "message_type": "incoming",
+            "private": false,
+            "sender": {
+              "account": {
+                "id": 1,
+                "name": "Agent"
+              },
+              "additional_attributes": {
+                "avatar_url_hash": "3ca4bc5c4ca9991a5d2b5c7a08c85ffd76d4a2a59a7cbf8fd70419bf03a99ce8",
+                "last_avatar_sync_at": "2026-03-08T12:02:20Z"
+              },
+              "avatar": "https://projeto1-chatwoot.udqjve.easypanel.host/rails/active_storage/representations/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBbGNJIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--e699b3bd04b32870020b86c75f14c897d5739d4d/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCem9MWm05eWJXRjBTU0lJYW5CbkJqb0dSVlE2RTNKbGMybDZaVjkwYjE5bWFXeHNXd2RwQWZvdyIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--5a2e77c5c83b1610db14ec1275d50e2e9b5bab8b/473398872_612932874673357_2127962019839100710_n.jpg",
+              "custom_attributes": {},
+              "email": null,
+              "id": 211,
+              "identifier": "5512991472732@s.whatsapp.net",
+              "name": "Denis Arruda",
+              "phone_number": "+5512991472732",
+              "thumbnail": "https://projeto1-chatwoot.udqjve.easypanel.host/rails/active_storage/representations/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBbGNJIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--e699b3bd04b32870020b86c75f14c897d5739d4d/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCem9MWm05eWJXRjBTU0lJYW5CbkJqb0dSVlE2RTNKbGMybDZaVjkwYjE5bWFXeHNXd2RwQWZvdyIsImV4cCI6bnVsbCwicHVyIjoidmFyaWF0aW9uIn19--5a2e77c5c83b1610db14ec1275d50e2e9b5bab8b/473398872_612932874673357_2127962019839100710_n.jpg",
+              "blocked": false
+            },
+            "source_id": "WAID:ACF9E2BEF0A2D3FE8C9F5AB03C9BF03D",
+            "event": "message_created"
+          },
+          "webhookUrl": "https://maissaude.app.n8n.cloud/webhook/ro_agent",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Loop Over Items3": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Enviar Texto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Supervisor",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Busca Cadastro",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "Adiciona CHAT supabase",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Atualiza CHAT Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca Telefone": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adiciona CHAT supabase": {
+      "main": [
+        [
+          {
+            "node": "Cria Histórico Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualiza CHAT Supabase": {
+      "main": [
+        [
+          {
+            "node": "Cria Histórico Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cria Histórico Supabase": {
+      "main": [
+        [
+          {
+            "node": "Delete Memory",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split de Mensagem": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Converter Foto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pausar IA": {
+      "main": [
+        [
+          {
+            "node": "Salvar Historico1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rota Atendimento": {
+      "main": [
+        [
+          {
+            "node": "ROTA Mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Salvar Historico Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI4": {
+      "main": [
+        [
+          {
+            "node": "Audio Redis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Info2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Cliente": {
+      "main": [
+        [
+          {
+            "node": "Cliente Existe?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cliente Existe?": {
+      "main": [
+        [
+          {
+            "node": "ROTA Entrando ou Saindo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Criar Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar Cliente": {
+      "main": [
+        [
+          {
+            "node": "ROTA Entrando ou Saindo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ROTA Entrando ou Saindo": {
+      "main": [
+        [
+          {
+            "node": "Pausar IA1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Hora da última mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Converter Audio": {
+      "main": [
+        [
+          {
+            "node": "OpenAI4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Converter Foto": {
+      "main": [
+        [
+          {
+            "node": "Analyze image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ROTA Mensagens": {
+      "main": [
+        [
+          {
+            "node": "Texto Redis",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Supervisor",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Intervalo entre Mensagens": {
+      "main": [
+        [
+          {
+            "node": "Buscas Mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Texto Redis": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audio Redis": {
+      "main": [
+        [
+          {
+            "node": "Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "imagem Redis": {
+      "main": [
+        [
+          {
+            "node": "Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscas Mensagens": {
+      "main": [
+        [
+          {
+            "node": "Compara Memoria",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem Completa1": {
+      "main": [
+        [
+          {
+            "node": "Deletar Mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deletar Mensagens": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compara Memoria": {
+      "main": [
+        [
+          {
+            "node": "Mensagem Completa1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Converter Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensagem": {
+      "main": [
+        [
+          {
+            "node": "Intervalo entre Mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supervisor": {
+      "main": [
+        [
+          {
+            "node": "Busca Telefone",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Split de mensagens",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze image": {
+      "main": [
+        [
+          {
+            "node": "Cria Histórico de Documento foto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Info2": {
+      "main": [
+        [
+          {
+            "node": "Buscar Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Extract from File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pausar IA1": {
+      "main": [
+        [
+          {
+            "node": "Pausar IA",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reativar IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split de mensagens": {
+      "main": [
+        [
+          {
+            "node": "Split de Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Split": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Split de mensagens",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Modelo Output",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Modelo Output": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Split de mensagens",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5 segundos": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Texto": {
+      "main": [
+        [
+          {
+            "node": "5 segundos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Cria Histórico de Documento PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File2": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Extract from File2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PDF Redis": {
+      "main": [
+        [
+          {
+            "node": "Mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reativar IA": {
+      "main": [
+        [
+          {
+            "node": "Rota Atendimento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tempo de inatividade 10min": {
+      "main": [
+        [
+          {
+            "node": "Reativar IA",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Rota Atendimento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hora da última mensagem": {
+      "main": [
+        [
+          {
+            "node": "Tempo de inatividade 10min",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Valida CPF": {
+      "ai_tool": [
+        [
+          {
+            "node": "Supervisor",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "consultar_profissionais": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "Cria Histórico de Documento foto": {
+      "main": [
+        [
+          {
+            "node": "imagem Redis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cria Histórico de Documento PDF": {
+      "main": [
+        [
+          {
+            "node": "PDF Redis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Think": {
+      "ai_tool": [
+        [
+          {
+            "node": "Supervisor",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "cadastramento": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "consultar_planos": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "agendamento": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "dados_paciente": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "consulta_agendamentos_realizados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "id_convenio": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "id_especialidade": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "busca_horarios": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Busca Cadastro",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Busca dados Paciente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Busca cadastro": {
+      "main": [
+        []
+      ]
+    },
+    "Busca Cadastro": {
+      "main": [
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Busca dados Paciente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row": {
+      "main": [
+        []
+      ]
+    },
+    "Busca dados Paciente": {
+      "main": [
+        [
+          {
+            "node": "Supervisor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RAG_Cadastro": {
+      "ai_tool": [
+        [
+          {
+            "node": "Supervisor",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RAG_Especialidade": {
+      "ai_tool": [
+        [
+          {
+            "node": "Supervisor",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RAG_Agendamento": {
+      "ai_tool": [
+        [
+          {
+            "node": "Supervisor",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RAG_Horarios": {
+      "ai_tool": [
+        [
+          {
+            "node": "Supervisor",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RAG_Profissionais": {
+      "ai_tool": [
+        [
+          {
+            "node": "Supervisor",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update_dados": {
+      "ai_tool": [
+        [
+          {
+            "node": "Supervisor",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a row in Supabase": {
+      "ai_tool": [
+        [
+          {
+            "node": "Supervisor",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "buscar_paciente": {
+      "ai_tool": [
+        [
+          {
+            "node": "Busca Cadastro",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "e12b4361-6c3a-40e1-be5e-c252168ff830",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4c75ffcc69b6411c77429e3be4644ff5e58260d19b6bc40fee15a23197d64d1e"
+  },
+  "id": "HydEDQpz9YM5aNdl",
+  "tags": [
+    {
+      "updatedAt": "2026-02-05T01:30:49.386Z",
+      "createdAt": "2026-02-05T01:30:49.386Z",
+      "id": "dMK1MORcQBiRSXyH",
+      "name": "Clínica"
+    }
+  ]
+}
