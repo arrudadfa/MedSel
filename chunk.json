@@ -1,0 +1,172 @@
+[
+    {
+    "chunk_id": "001",
+    "section_path": "Institucional > Proposta de valor",
+    "content": "A MedSel é uma clínica médica em São José dos Campos com foco em atendimento acessível, humanizado e de qualidade. Acredita que saúde é um direito de todos e que o cuidado começa com a escuta e acolhimento do paciente.",
+    "token_count": 52,
+    "content_type": "overview",
+    "priority_level": "high",
+    "keywords": "MedSel,São José dos Campos,atendimento acessível,humanizado,qualidade,escuta",
+    "is_actionable": true
+    },
+    {
+    "chunk_id": "002",
+    "section_path": "Institucional > Especialidades e cobertura",
+    "content": "A clínica atende em mais de 20 especialidades médicas e acompanha o paciente em todas as fases da vida, do pré-natal à terceira idade. Exemplos citados: Clínica Geral, Pediatria, Ginecologia, Endocrinologia, Ortopedia e Psicologia.",
+    "token_count": 60,
+    "content_type": "overview",
+    "priority_level": "high",
+    "keywords": "especialidades,pré-natal,terceira idade,Clínica Geral,Pediatria,Ginecologia,Endocrinologia,Ortopedia,Psicologia",
+    "is_actionable": true
+    },
+    {
+    "chunk_id": "003",
+    "section_path": "Institucional > Equipe e atendimento",
+    "content": "A equipe da MedSel é formada por profissionais experientes, comprometidos com atendimento ético, acolhedor e personalizado. O objetivo é que o paciente se sinta bem cuidado desde o primeiro contato até o final da consulta.",
+    "token_count": 56,
+    "content_type": "policy",
+    "priority_level": "high",
+    "keywords": "equipe,profissionais experientes,atendimento ético,acolhedor,personalizado,primeiro contato",
+    "is_actionable": true
+    },
+    {
+    "chunk_id": "004",
+    "section_path": "Institucional > Compromisso",
+    "content": "Na MedSel, cada consulta é tratada como um compromisso com a saúde do paciente, indo além de um atendimento pontual. A clínica reforça o cuidado contínuo e a atenção individual durante o acompanhamento.",
+    "token_count": 52,
+    "content_type": "overview",
+    "priority_level": "medium",
+    "keywords": "consulta,compromisso com a saúde,cuidado contínuo,atenção individual,acompanhamento",
+    "is_actionable": true
+    },
+    {
+    "chunk_id": "005",
+    "section_path": "Atendimento > Horário de funcionamento",
+    "content": "Horário de funcionamento da MedSel: Segunda a Sexta-feira das 07:00 às 18:00. Sábado das 07:30 às 12:00. Use esses horários para agendamento e orientações de chegada à unidade.",
+    "token_count": 50,
+    "content_type": "policy",
+    "priority_level": "high",
+    "keywords": "horário de funcionamento,segunda a sexta,07:00,18:00,sábado,07:30,12:00",
+    "is_actionable": true
+    },
+    {
+    "chunk_id": "006",
+    "section_path": "Unidades > Unidade 1 Centro > Endereço",
+    "content": "Unidade 1 – Centro: Pça Afonso Pena, 230, São José dos Campos. Utilize este endereço para rotas, confirmação de local de consulta e envio de orientações ao paciente.",
+    "token_count": 41,
+    "content_type": "contact",
+    "priority_level": "high",
+    "keywords": "Unidade 1,Centro,endereço,Pça Afonso Pena,230,São José dos Campos",
+    "is_actionable": true
+    },
+    {
+    "chunk_id": "007",
+    "section_path": "Unidades > Unidade 1 Centro > Telefone",
+    "content": "Telefone da Unidade 1 – Centro (MedSel): (12) 3922-3357. Use este contato para agendamentos, confirmações, informações de convênios e dúvidas sobre horários.",
+    "token_count": 44,
+    "content_type": "contact",
+    "priority_level": "high",
+    "keywords": "telefone,contato,agendamento,confirmação,(12) 3922-3357,Unidade Centro",
+    "is_actionable": true
+    },
+    {
+    "chunk_id": "008",
+    "section_path": "Convênios > Lista de convênios atendidos",
+    "content": "Convênios atendidos (parte 1): ASSEFAZ (84), AUSSEL (95), AVUS (173), BRADESCO OPERADORA 421715 (278), BRADESCO SAUDE 005711 (226), CARTAO TEM (118), COOPER (172), DONA SAUDE CLINICAS LTDA (275).",
+    "token_count": 71,
+    "content_type": "list",
+    "priority_level": "high",
+    "keywords": "convênios,ASSEFAZ,AUSSEL,AVUS,BRADESCO OPERADORA,BRADESCO SAUDE,CARTAO TEM,COOPER,DONA SAUDE",
+    "is_actionable": true
+    },
+    {
+    "chunk_id": "009",
+    "section_path": "Convênios > Lista de convênios atendidos",
+    "content": "Convênios atendidos (parte 2): DOUTOR HOJE (235), DR. EXAME (203), ECONOMUS (128), FUNDAÇÃO CESP VIVEST (85), GEAP (146), HAPVIDA MEDSEL (240), INTERMEDICA (71), INTERMEDICA ATENDER (304).",
+    "token_count": 66,
+    "content_type": "list",
+    "priority_level": "high",
+    "keywords": "convênios,DOUTOR HOJE,DR. EXAME,ECONOMUS,FUNDAÇÃO CESP,VIVEST,GEAP,HAPVIDA,INTERMEDICA",
+    "is_actionable": true
+    },
+    {
+    "chunk_id": "010",
+    "section_path": "Convênios > Lista de convênios atendidos",
+    "content": "Convênios atendidos (parte 3): LEADER SAUDE (215), LIFE (73), MEDISERVICE (74), MEDNET (152), PARTICULAR (107), PARTICULAR PARCERIAS (244), PLANO MÚTUO (137), PLANTÃO BEM ESTAR (143).",
+    "token_count": 63,
+    "content_type": "list",
+    "priority_level": "high",
+    "keywords": "convênios,LEADER SAUDE,LIFE,MEDISERVICE,MEDNET,PARTICULAR,PARTICULAR PARCERIAS,PLANO MÚTUO,PLANTÃO BEM ESTAR",
+    "is_actionable": true
+    },
+    {
+    "chunk_id": "011",
+    "section_path": "Convênios > Lista de convênios atendidos",
+    "content": "Convênios atendidos (parte 4): POLICLIN (75), PORTO SEGURO (77), POSTAL SAUDE (121), PRESTOMED (257), REDE MAIS SAUDE (188), SANTA CASA SAUDE MEDSEL (115), SÃO FRANCISCO VIDA (79), SEPACO (201).",
+    "token_count": 65,
+    "content_type": "list",
+    "priority_level": "high",
+    "keywords": "convênios,POLICLIN,PORTO SEGURO,POSTAL SAUDE,PRESTOMED,REDE MAIS SAUDE,SANTA CASA SAUDE,SÃO FRANCISCO VIDA,SEPACO",
+    "is_actionable": true
+    },
+    {
+    "chunk_id": "012",
+    "section_path": "Convênios > Lista de convênios atendidos",
+    "content": "Convênios atendidos (parte 5): SINDESPORTE (111), SPA SAUDE (199), SUL AMERICA (81), TEMPO USS (162), TOTAL MEDCARE (72), UNICA SAÚDE (126), UNIMED EXTRA CONTRATUAL (239), UNIMED SJC (161).",
+    "token_count": 65,
+    "content_type": "list",
+    "priority_level": "high",
+    "keywords": "convênios,SINDESPORTE,SPA SAUDE,SUL AMERICA,TEMPO USS,TOTAL MEDCARE,UNICA SAÚDE,UNIMED EXTRA CONTRATUAL,UNIMED SJC",
+    "is_actionable": true
+    },
+    {
+    "chunk_id": "013",
+    "section_path": "Convênios > Lista de convênios atendidos",
+    "content": "Convênios atendidos (parte 6): UNIMED VALE NOVO PAULISTA (82), VALE SAUDE SEMPRE (185). Confirme o IdConvenio ao cadastrar o paciente ou validar a elegibilidade do plano.",
+    "token_count": 48,
+    "content_type": "list",
+    "priority_level": "high",
+    "keywords": "convênios,UNIMED VALE NOVO PAULISTA,VALE SAUDE SEMPRE,IdConvenio,cadastro,elegibilidade",
+    "is_actionable": true
+    },
+    {
+    "chunk_id": "014",
+    "section_path": "Especialidades > Lista de especialidades",
+    "content": "Especialidades (parte 1): Alergologia (39), Angiologia/Vascular (8), Cardiologia (9), Cirurgia Vascular (62), Clínica Médica (1), Dermatologia (6), Endocrinologia (16), Endocrinologia Infantil (59).",
+    "token_count": 62,
+    "content_type": "list",
+    "priority_level": "high",
+    "keywords": "especialidades,Alergologia,Angiologia,Vascular,Cardiologia,Cirurgia Vascular,Clínica Médica,Dermatologia,Endocrinologia",
+    "is_actionable": true
+    },
+    {
+    "chunk_id": "015",
+    "section_path": "Especialidades > Lista de especialidades",
+    "content": "Especialidades (parte 2): Exames (43), Fonoaudiologia (37), Gastroenterologia (18), Genética Médica (58), Geneticista (73), Geriatria (38), Ginecologia (2), Neurologia (41).",
+    "token_count": 55,
+    "content_type": "list",
+    "priority_level": "high",
+    "keywords": "especialidades,Exames,Fonoaudiologia,Gastroenterologia,Genética Médica,Geneticista,Geriatria,Ginecologia,Neurologia",
+    "is_actionable": true
+    },
+    {
+    "chunk_id": "016",
+    "section_path": "Especialidades > Lista de especialidades",
+    "content": "Especialidades (parte 3): Nutricionista (32), Oftalmologia (5), Ortopedia (23), Otorrinolaringologia (24), Pediatria (34), Pneumologia (47), Psicólogo (33), Psiquiatria (40).",
+    "token_count": 51,
+    "content_type": "list",
+    "priority_level": "high",
+    "keywords": "especialidades,Nutricionista,Oftalmologia,Ortopedia,Otorrinolaringologia,Pediatria,Pneumologia,Psicólogo,Psiquiatria",
+    "is_actionable": true
+    },
+    {
+    "chunk_id": "017",
+    "section_path": "Especialidades > Lista de especialidades",
+    "content": "Especialidades (parte 4): Psiquiatria Infantil (60), Reumatologia (46), Ultrassonografia (28), Urologia (29). Use o id da especialidade para cadastro, roteamento de agenda e triagem de atendimento.",
+    "token_count": 53,
+    "content_type": "list",
+    "priority_level": "high",
+    "keywords": "especialidades,Psiquiatria Infantil,Reumatologia,Ultrassonografia,Urologia,id,agenda,triagem",
+    "is_actionable": true
+    }
+    ]
