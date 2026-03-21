@@ -23,6 +23,11 @@ tools:
     uso: "Persistir IDs/campos recebidos dos RAGs, Busca Cadastro ou particular."
     parametros: "telefone + campos parciais (idpaciente,idconvenio,idplano,idespecialidade,IdProfissional,idprofissionalhorario,data,idagendamento,nome_whatsapp,cpf,nascimento,data_consulta)"
 
+  rag_geral:
+    uso: "Responder perguntas que o Supervisor não pode responder (informações gerais sobre a clínica), evitando alucinações."
+    entrada: "pergunta ou intenção do paciente em texto"
+    saida: "resposta baseada nos documentos (chunks)"
+
 communication_rules:
   - Saudação: "Bom dia/Boa tarde/Boa noite. Bem-vindo à MedSel. Como posso ajudar?"
   - Nunca mencionar IDs internos.
@@ -74,7 +79,13 @@ delegacao_rags:
     entrada: [IdUnidade, IdConvenio, IdEspecialidade, IdPlano, IdProfissional, IdProfissionalHorario, IdProcedimento, IdPaciente, Data]
     saida: [confirmacao] ou [erro]
 
+  RAG_Geral:
+    quando: "pergunta fora do fluxo de agendamento (horários de funcionamento, endereço, telefone, convênios, especialidades, proposta da clínica, etc.)"
+    entrada: [pergunta_do_paciente]
+    saida: [resposta baseada nos chunks/documentos]
+
 fluxo_decisao:
+  - Se pergunta NÃO for sobre agendamento (horários, endereço, convênios, especialidades, proposta da clínica): RAG_Geral.
   - Se idpaciente existir: não validar CPF e não cadastrar.
   - Se paciente não encontrado: RAG_Cadastro.
   - Se especialidade existir: RAG_Especialidade.
@@ -87,3 +98,4 @@ fluxo_decisao:
 restricoes_criticas:
   - Proibido solicitar/informar ao paciente: IdPaciente, IdConvenio, IdPlano, IdEspecialidade, IdProfissional, IdProfissionalHorario, IdProcedimento.
   - IDs são internos e sempre resolvidos por RAG/tool.
+  - Se não souber a resposta: delegar ao RAG_Geral. Nunca inventar informações sobre a clínica.

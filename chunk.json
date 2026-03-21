@@ -72,7 +72,7 @@
     {
     "chunk_id": "008",
     "section_path": "Convênios > Lista de convênios atendidos",
-    "content": "Convênios atendidos (parte 1): ASSEFAZ (84), AUSSEL (95), AVUS (173), BRADESCO OPERADORA 421715 (278), BRADESCO SAUDE 005711 (226), CARTAO TEM (118), COOPER (172), DONA SAUDE CLINICAS LTDA (275).",
+    "content": "Convênios atendidos (parte 1): ASSEFAZ (84), AUSSEL (95), AVUS (173), BRADESCO OPERADORA 421715 (278), BRADESCO SAUDE 005711 (226), CARTAO TEM (118), COOPER (172), DONA SAUDE CLINICAS LTDA (275). O número entre parênteses é o IdConvenio.",
     "token_count": 71,
     "content_type": "list",
     "priority_level": "high",
@@ -122,7 +122,7 @@
     {
     "chunk_id": "013",
     "section_path": "Convênios > Lista de convênios atendidos",
-    "content": "Convênios atendidos (parte 6): UNIMED VALE NOVO PAULISTA (82), VALE SAUDE SEMPRE (185). Confirme o IdConvenio ao cadastrar o paciente ou validar a elegibilidade do plano.",
+    "content": "Convênios atendidos (parte 6): UNIMED VALE NOVO PAULISTA (82), VALE SAUDE SEMPRE (185). O número entre parênteses é o IdConvenio. Confirme-o ao cadastrar o paciente ou validar a elegibilidade do plano.",
     "token_count": 48,
     "content_type": "list",
     "priority_level": "high",
@@ -132,11 +132,11 @@
     {
     "chunk_id": "014",
     "section_path": "Especialidades > Lista de especialidades",
-    "content": "Especialidades (parte 1): Alergologia (39), Angiologia/Vascular (8), Cardiologia (9), Cirurgia Vascular (62), Clínica Médica (1), Dermatologia (6), Endocrinologia (16), Endocrinologia Infantil (59).",
+    "content": "Especialidades (parte 1): Alergologia (39), Angiologia/Vascular (8), Cardiologia (9), Cirurgia Vascular (62), Clínica Médica (1), Dermatologia (6), Endocrinologia (16), Endocrinologia Infantil (59). O número entre parênteses é o IdEspecialidade.",
     "token_count": 62,
     "content_type": "list",
     "priority_level": "high",
-    "keywords": "especialidades,Alergologia,Angiologia,Vascular,Cardiologia,Cirurgia Vascular,Clínica Médica,Dermatologia,Endocrinologia",
+    "keywords": "especialidades,Alergologia,Angiologia,Vascular,Cardiologia,Cirurgia Vascular,Clínica Médica,Dermatologia,Endocrinologia,IdEspecialidade",
     "is_actionable": true
     },
     {
@@ -162,11 +162,11 @@
     {
     "chunk_id": "017",
     "section_path": "Especialidades > Lista de especialidades",
-    "content": "Especialidades (parte 4): Psiquiatria Infantil (60), Reumatologia (46), Ultrassonografia (28), Urologia (29). Use o id da especialidade para cadastro, roteamento de agenda e triagem de atendimento.",
+    "content": "Especialidades (parte 4): Psiquiatria Infantil (60), Reumatologia (46), Ultrassonografia (28), Urologia (29). O número entre parênteses é o IdEspecialidade. Use para cadastro, roteamento de agenda e triagem de atendimento.",
     "token_count": 53,
     "content_type": "list",
     "priority_level": "high",
-    "keywords": "especialidades,Psiquiatria Infantil,Reumatologia,Ultrassonografia,Urologia,id,agenda,triagem",
+    "keywords": "especialidades,Psiquiatria Infantil,Reumatologia,Ultrassonografia,Urologia,IdEspecialidade,agenda,triagem",
     "is_actionable": true
     }
     ]
