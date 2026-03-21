@@ -1,0 +1,11 @@
+# Variáveis de ambiente / credenciais locais
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.crt
+
+# Artefatos Python
+__pycache__/
+*.pyc

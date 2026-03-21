@@ -12,21 +12,53 @@ from openai import OpenAI
 import logging
 
 # ================================
-# CONFIGURAÇÕES (HARDCODED)
+# CONFIGURAÇÕES (ENV)
 # ================================
 
-# OpenAI API Configuration
-OPENAI_API_KEY = "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"
-OPENAI_MODEL = "text-embedding-3-small"
+def load_dotenv(dotenv_path: str = ".env") -> None:
+    """Carrega variáveis do arquivo .env para o ambiente."""
+    if not os.path.exists(dotenv_path):
+        return
 
-#
+    with open(dotenv_path, "r", encoding="utf-8") as env_file:
+        for raw_line in env_file:
+            line = raw_line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            key = key.strip()
+            value = value.strip().strip('"').strip("'")
+            os.environ.setdefault(key, value)
+
+
+load_dotenv()
+
+# OpenAI API Configuration
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL", "text-embedding-3-small")
 
 # Supabase Configuration  
-SUPABASE_URL = "https://pymrmkomehxiztwikssy.supabase.co"
-SUPABASE_KEY = "sb_publishable_JIFl9hKhidXi2MueCHpwzw_mL87pE7W"
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
 # Files Configuration
-CHUNKS_FILE = "chunk.json"
+CHUNKS_FILE = os.getenv("CHUNKS_FILE", "chunk.json")
+
+missing_env = [
+    var_name
+    for var_name, var_value in {
+        "OPENAI_API_KEY": OPENAI_API_KEY,
+        "SUPABASE_URL": SUPABASE_URL,
+        "SUPABASE_KEY": SUPABASE_KEY,
+    }.items()
+    if not var_value
+]
+
+if missing_env:
+    missing_list = ", ".join(missing_env)
+    raise RuntimeError(
+        f"Variáveis obrigatórias ausentes no ambiente/.env: {missing_list}"
+    )
 
 # ================================
 # SETUP
